@@ -1,12 +1,11 @@
-import { useState } from 'react'
+import Geomap from "./graphs/geomap";
 
 function App() {
-
   return (
-    <div className="text-3xl font-bold underline">
-      Hello world!
+    <div>
+      <Geomap></Geomap>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

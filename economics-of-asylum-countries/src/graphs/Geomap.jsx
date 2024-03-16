@@ -1,8 +1,10 @@
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 import { feature } from "topojson-client";
+import { countryState } from "../context/CountryProvider.jsx";
 
 function Geomap() {
+  const {country, setCountry} = countryState();
   const geoRef = useRef();
 
   useEffect(() => {
@@ -47,10 +49,15 @@ function Geomap() {
         .style("stroke", "black")
         .on("click", function (d, i) {
           var url = "/" + countryNames[i.id];
-          window.location = url;
+          // window.location = url;
+          setCountry(countryNames[i.id]);
         });
     });
   }, []);
+  
+  useEffect(() => {
+    console.log(`Country clicked ${country}`);
+  }, [country])
 
   return (
     <div>

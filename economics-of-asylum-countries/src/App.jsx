@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Geomap from "./graphs/geomap";
+import Homepage from "./pages/Homepage";
 
 function App() {
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Geomap></Geomap>}></Route>
+          <Route path="/" element={<Homepage />}></Route>
         </Routes>
       </Router>
     </>

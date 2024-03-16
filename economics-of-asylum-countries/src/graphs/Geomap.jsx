@@ -50,8 +50,7 @@ function Geomap() {
         .style("stroke", "black")
         .on("click", function (d, i) {
           var url = "/" + countryNames[i.id];
-          // window.location = url;
-          navigate("/country");
+          navigate(url);
           setCountry(countryNames[i.id]);
         });
     });

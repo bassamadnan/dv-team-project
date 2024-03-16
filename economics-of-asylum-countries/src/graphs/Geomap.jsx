@@ -5,7 +5,7 @@ import { countryState } from "../context/CountryProvider.jsx";
 import { useNavigate } from "react-router-dom";
 
 function Geomap() {
-  const {country, setCountry} = countryState();
+  const { country, setCountry } = countryState();
   const geoRef = useRef();
   const navigate = useNavigate();
   useEffect(() => {
@@ -34,6 +34,23 @@ function Geomap() {
         countryNames[d.iso_n3] = d.name;
       });
 
+      // tooltip
+      var tooltip = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("display", "none")
+        .style("background-color", "white")
+        .style("color", "black")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px")
+        .style("position", "absolute")
+        .style("pointer-events", "none")
+        .style("z", 10)
+        .style("padding", "5px")
+        .style("opacity", 0.75);
+
       // rendering the paths for each country
       const countries = feature(topoJsonData, topoJsonData.objects.countries);
       g.selectAll("path")
@@ -52,13 +69,29 @@ function Geomap() {
           var url = "/" + countryNames[i.id];
           navigate(url);
           setCountry(countryNames[i.id]);
+        })
+        .on("mouseover", (event, d) => {
+          tooltip.style("display", "block").style("fill", "pink");
+          console.log("mouseover", event, d);
+        })
+        .on("mousemove", (event, d) => {
+          tooltip
+            .html(countryNames[d.id])
+            .style("fill", "blue")
+            .style("left", `${event.pageX + 10}px`)
+            .style("top", `${event.pageY - 10}px`);
+          console.log("mousemove", event, d);
+        })
+        .on("mouseleave", (event) => {
+          tooltip.style("display", "none");
+          console.log("mouseleave", event);
         });
     });
   }, []);
-  
+
   useEffect(() => {
     console.log(`Country clicked ${country}`);
-  }, [country])
+  }, [country]);
 
   return (
     <div>

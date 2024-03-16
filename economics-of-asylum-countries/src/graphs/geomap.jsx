@@ -44,7 +44,11 @@ function Geomap() {
           // fake category based on even or odd id
           return gr % 2 == 1 ? "lightGreen" : "indianRed";
         })
-        .style("stroke", "black");
+        .style("stroke", "black")
+        .on("click", function (d, i) {
+          var url = "/" + countryNames[i.id];
+          window.location = url;
+        });
     });
   }, []);
 

@@ -2,11 +2,12 @@ import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 import { feature } from "topojson-client";
 import { countryState } from "../context/CountryProvider.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Geomap() {
   const {country, setCountry} = countryState();
   const geoRef = useRef();
-
+  const navigate = useNavigate();
   useEffect(() => {
     // binding the svg using useRef
     const svg = d3.select(geoRef.current);
@@ -50,6 +51,7 @@ function Geomap() {
         .on("click", function (d, i) {
           var url = "/" + countryNames[i.id];
           // window.location = url;
+          navigate("/country");
           setCountry(countryNames[i.id]);
         });
     });

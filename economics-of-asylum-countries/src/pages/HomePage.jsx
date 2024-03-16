@@ -1,7 +1,7 @@
 import React from 'react'
 import Geomap from '../graphs/Geomap'
 
-const Homepage = () => {
+const HomePage = () => {
   return (
     <div>
         <Geomap />
@@ -9,4 +9,4 @@ const Homepage = () => {
   )
 }
 
-export default Homepage
+export default HomePage

@@ -3,13 +3,16 @@ import { useEffect, useRef } from "react";
 import { feature } from "topojson-client";
 import { countryState } from "../context/CountryProvider.jsx";
 import { useNavigate } from "react-router-dom";
-import { incoming_refugee_data, outgoing_refugee_data } from "../utils/data_parser.js";
+import {
+  incoming_refugee_data,
+  outgoing_refugee_data,
+} from "../utils/data_parser.js";
+import { sliderRight, sliderBottom } from "d3-simple-slider";
 
 function Geomap() {
-  console.log(incoming_refugee_data);
-  console.log(outgoing_refugee_data);
   const { country, setCountry } = countryState();
   const geoRef = useRef();
+  const sliderRef = useRef();
   const navigate = useNavigate();
   useEffect(() => {
     // binding the svg using useRef
@@ -54,6 +57,27 @@ function Geomap() {
         .style("padding", "5px")
         .style("opacity", 0.75);
 
+      // year slider
+      var currentYear = "2000";
+      var slider = sliderRight()
+        .min(2000)
+        .max(2023)
+        .step(1)
+        .height(400)
+        .default(2000)
+        .ticks(24)
+        .tickFormat(d3.format("d"))
+        .on("onchange", (event) => {
+          currentYear = event.toString();
+        });
+      var yearSlider = d3
+        .select(sliderRef.current)
+        .append("svg")
+        .attr("class", "yearSlider")
+        .attr("transform", "translate(50,50)")
+        .attr("height", 500)
+        .call(slider);
+
       // rendering the paths for each country
       const countries = feature(topoJsonData, topoJsonData.objects.countries);
       g.selectAll("path")
@@ -63,9 +87,26 @@ function Geomap() {
         .attr("class", "country")
         .attr("d", pathGenerator)
         .style("fill", function (d) {
-          var gr = parseInt(d.id);
-          // fake category based on even or odd id
-          return gr % 2 == 1 ? "lightGreen" : "indianRed";
+          // to get exact values
+          var refugeeIn = incoming_refugee_data[currentYear][d.id]
+            ? incoming_refugee_data[currentYear][d.id]
+            : 0;
+          var refugeeOut = outgoing_refugee_data[currentYear][d.id]
+            ? outgoing_refugee_data[currentYear][d.id]["Count"]
+            : 0;
+          // to get true false
+          // var refugeeIn = incoming_refugee_data[currentYear][d.id]
+          //   ? true
+          //   : false;
+          // var refugeeOut = outgoing_refugee_data[currentYear][d.id]
+          //   ? true
+          //   : false;
+          console.log(currentYear, d.id, refugeeIn, refugeeOut);
+          if (refugeeIn) {
+            if (refugeeOut) return "rgb(255,0,255)";
+            return "rgb(0,0,255)";
+          }
+          return "rgb(255,0,0)";
         })
         .style("stroke", "black")
         .on("click", function (d, i) {
@@ -74,8 +115,7 @@ function Geomap() {
           setCountry(countryNames[i.id]);
         })
         .on("mouseover", (event, d) => {
-          tooltip.style("display", "block").style("fill", "pink");
-          console.log("mouseover", event, d);
+          tooltip.style("display", "block");
         })
         .on("mousemove", (event, d) => {
           tooltip
@@ -83,11 +123,9 @@ function Geomap() {
             .style("fill", "blue")
             .style("left", `${event.pageX + 10}px`)
             .style("top", `${event.pageY - 10}px`);
-          console.log("mousemove", event, d);
         })
         .on("mouseleave", (event) => {
           tooltip.style("display", "none");
-          console.log("mouseleave", event);
         });
     });
   }, []);
@@ -97,8 +135,9 @@ function Geomap() {
   }, [country]);
 
   return (
-    <div>
-      <svg className="w-[960px] h-[500px] " ref={geoRef}></svg>
+    <div className="flex">
+      <svg className="w-3/4 h-[500px]" ref={geoRef}></svg>
+      <svg className="w-1/4 h-[500px]" ref={sliderRef}></svg>
     </div>
   );
 }

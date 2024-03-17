@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { feature } from "topojson-client";
 import { countryState } from "../context/CountryProvider.jsx";
 import { useNavigate } from "react-router-dom";
-import { incoming_refugee_data, outgoing_refugee_data } from "../utils/unhcr_outgoing_parser.js";
+import { incoming_refugee_data, outgoing_refugee_data } from "../utils/data_parser.js";
 
 function Geomap() {
   console.log(incoming_refugee_data);

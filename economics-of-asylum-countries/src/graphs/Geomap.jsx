@@ -69,6 +69,21 @@ function Geomap() {
         .tickFormat(d3.format("d"))
         .on("onchange", (event) => {
           currentYear = event.toString();
+          g.selectAll(".country").style("fill", function (d) {
+            // to get exact values
+            var refugeeIn = incoming_refugee_data[currentYear][d.id]
+              ? incoming_refugee_data[currentYear][d.id]
+              : 0;
+            var refugeeOut = outgoing_refugee_data[currentYear][d.id]
+              ? outgoing_refugee_data[currentYear][d.id]["Count"]
+              : 0;
+            // console.log(currentYear, d.id, refugeeIn, refugeeOut);
+            if (refugeeIn) {
+              if (refugeeOut) return "rgb(255,0,255)";
+              return "rgb(0,0,255)";
+            }
+            return "rgb(255,0,0)";
+          });
         });
       var yearSlider = d3
         .select(sliderRef.current)
@@ -94,14 +109,7 @@ function Geomap() {
           var refugeeOut = outgoing_refugee_data[currentYear][d.id]
             ? outgoing_refugee_data[currentYear][d.id]["Count"]
             : 0;
-          // to get true false
-          // var refugeeIn = incoming_refugee_data[currentYear][d.id]
-          //   ? true
-          //   : false;
-          // var refugeeOut = outgoing_refugee_data[currentYear][d.id]
-          //   ? true
-          //   : false;
-          console.log(currentYear, d.id, refugeeIn, refugeeOut);
+          // console.log(currentYear, d.id, refugeeIn, refugeeOut);
           if (refugeeIn) {
             if (refugeeOut) return "rgb(255,0,255)";
             return "rgb(0,0,255)";

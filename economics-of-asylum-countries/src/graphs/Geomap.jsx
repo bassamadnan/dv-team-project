@@ -3,9 +3,10 @@ import { useEffect, useRef } from "react";
 import { feature } from "topojson-client";
 import { countryState } from "../context/CountryProvider.jsx";
 import { useNavigate } from "react-router-dom";
-import outgoing_refugee_data from "../utils/unhcr_outgoing_parser.js";
+import { incoming_refugee_data, outgoing_refugee_data } from "../utils/unhcr_outgoing_parser.js";
 
 function Geomap() {
+  console.log(incoming_refugee_data);
   console.log(outgoing_refugee_data);
   const { country, setCountry } = countryState();
   const geoRef = useRef();

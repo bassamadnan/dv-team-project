@@ -13,6 +13,7 @@ function Geomap() {
   const { country, setCountry } = countryState();
   const geoRef = useRef();
   const sliderRef = useRef();
+  const dropdownRef = useRef();
   const navigate = useNavigate();
   useEffect(() => {
     // binding the svg using useRef
@@ -57,8 +58,9 @@ function Geomap() {
         .style("padding", "5px")
         .style("opacity", 0.75);
 
-      // year slider
+      // year slider and type of content
       var currentYear = "2000";
+      var contentType = "None";
       var slider = sliderRight()
         .min(2000)
         .max(2023)
@@ -69,20 +71,16 @@ function Geomap() {
         .tickFormat(d3.format("d"))
         .on("onchange", (event) => {
           currentYear = event.toString();
+
           g.selectAll(".country").style("fill", function (d) {
-            // to get exact values
-            var refugeeIn = incoming_refugee_data[currentYear][d.id]
-              ? incoming_refugee_data[currentYear][d.id]
-              : 0;
-            var refugeeOut = outgoing_refugee_data[currentYear][d.id]
-              ? outgoing_refugee_data[currentYear][d.id]["Count"]
-              : 0;
-            // console.log(currentYear, d.id, refugeeIn, refugeeOut);
-            if (refugeeIn) {
-              if (refugeeOut) return "rgb(255,0,255)";
-              return "rgb(0,0,255)";
-            }
-            return "rgb(255,0,0)";
+            if (contentType == "None") return "white";
+            else if (contentType == "Incoming refugees")
+              return incoming_refugee_data[currentYear][d.id]
+                ? "blue"
+                : "white";
+            else if (contentType == "Outgoing refugees")
+              return outgoing_refugee_data[currentYear][d.id] ? "red" : "white";
+            else return "purple";
           });
         });
       var yearSlider = d3
@@ -92,6 +90,22 @@ function Geomap() {
         .attr("transform", "translate(50,50)")
         .attr("height", 500)
         .call(slider);
+      var contentTypeMenu = d3
+        .select(dropdownRef.current)
+        .on("change", (event) => {
+          contentType = event.target.value;
+
+          g.selectAll(".country").style("fill", function (d) {
+            if (contentType == "None") return "white";
+            else if (contentType == "Incoming refugees")
+              return incoming_refugee_data[currentYear][d.id]
+                ? "blue"
+                : "white";
+            else if (contentType == "Outgoing refugees")
+              return outgoing_refugee_data[currentYear][d.id] ? "red" : "white";
+            else return "purple";
+          });
+        });
 
       // rendering the paths for each country
       const countries = feature(topoJsonData, topoJsonData.objects.countries);
@@ -102,19 +116,12 @@ function Geomap() {
         .attr("class", "country")
         .attr("d", pathGenerator)
         .style("fill", function (d) {
-          // to get exact values
-          var refugeeIn = incoming_refugee_data[currentYear][d.id]
-            ? incoming_refugee_data[currentYear][d.id]
-            : 0;
-          var refugeeOut = outgoing_refugee_data[currentYear][d.id]
-            ? outgoing_refugee_data[currentYear][d.id]["Count"]
-            : 0;
-          // console.log(currentYear, d.id, refugeeIn, refugeeOut);
-          if (refugeeIn) {
-            if (refugeeOut) return "rgb(255,0,255)";
-            return "rgb(0,0,255)";
-          }
-          return "rgb(255,0,0)";
+          if (contentType == "None") return "white";
+          else if (contentType == "Incoming refugees")
+            return incoming_refugee_data[currentYear][d.id] ? "blue" : "white";
+          else if (contentType == "Outgoing refugees")
+            return outgoing_refugee_data[currentYear][d.id] ? "red" : "white";
+          else return "purple";
         })
         .style("stroke", "black")
         .on("click", function (d, i) {
@@ -144,8 +151,16 @@ function Geomap() {
 
   return (
     <div className="flex">
-      <svg className="w-3/4 h-[500px]" ref={geoRef}></svg>
-      <svg className="w-1/4 h-[500px]" ref={sliderRef}></svg>
+      <svg className="w-3/5 h-[500px]" ref={geoRef}></svg>
+      <svg className="w-1/5 h-[500px]" ref={sliderRef}></svg>
+      <form className="w-1/5 h-[500px] flex-col" defaultValue="None">
+        <select ref={dropdownRef}>
+          <option>None</option>
+          <option>Incoming refugees</option>
+          <option>Outgoing refugees</option>
+          <option>Net difference</option>
+        </select>
+      </form>
     </div>
   );
 }

@@ -41,6 +41,20 @@ function Geomap() {
         countryNames[d.iso_n3] = d.name;
       });
 
+      // color schemes
+      var incomingColors = d3
+        .scaleThreshold()
+        .domain([0, 100, 300, 600, 1000, 3000, 6000, 10000, 100000])
+        .range(d3.schemeYlGn[9]);
+      var outgoingColors = d3
+        .scaleThreshold()
+        .domain([0, 100, 300, 600, 1000, 3000, 6000, 10000, 100000])
+        .range(d3.schemeOrRd[9]);
+      var netDifferenceColors = d3
+        .scaleThreshold()
+        .domain([0, 100, 300, 600, 1000, 3000, 6000, 10000, 100000])
+        .range(d3.schemeRdPu[9]);
+
       // tooltip
       var tooltip = d3
         .select("body")
@@ -76,11 +90,33 @@ function Geomap() {
             if (contentType == "None") return "white";
             else if (contentType == "Incoming refugees")
               return incoming_refugee_data[currentYear][d.id]
-                ? "blue"
+                ? incomingColors(incoming_refugee_data[currentYear][d.id])
                 : "white";
             else if (contentType == "Outgoing refugees")
-              return outgoing_refugee_data[currentYear][d.id] ? "red" : "white";
-            else return "purple";
+              return outgoing_refugee_data[currentYear][d.id]
+                ? outgoingColors(
+                    outgoing_refugee_data[currentYear][d.id]["Count"]
+                  )
+                : "white";
+            else {
+              if (incoming_refugee_data[currentYear][d.id]) {
+                if (outgoing_refugee_data[currentYear][d.id])
+                  return netDifferenceColors(
+                    outgoing_refugee_data[currentYear][d.id]["Count"] -
+                      incoming_refugee_data[currentYear][d.id]
+                  );
+                else
+                  return netDifferenceColors(
+                    -incoming_refugee_data[currentYear][d.id]
+                  );
+              } else {
+                if (outgoing_refugee_data[currentYear][d.id])
+                  return netDifferenceColors(
+                    outgoing_refugee_data[currentYear][d.id]["Count"]
+                  );
+                else return "white";
+              }
+            }
           });
         });
       var yearSlider = d3
@@ -99,11 +135,33 @@ function Geomap() {
             if (contentType == "None") return "white";
             else if (contentType == "Incoming refugees")
               return incoming_refugee_data[currentYear][d.id]
-                ? "blue"
+                ? incomingColors(incoming_refugee_data[currentYear][d.id])
                 : "white";
             else if (contentType == "Outgoing refugees")
-              return outgoing_refugee_data[currentYear][d.id] ? "red" : "white";
-            else return "purple";
+              return outgoing_refugee_data[currentYear][d.id]
+                ? outgoingColors(
+                    outgoing_refugee_data[currentYear][d.id]["Count"]
+                  )
+                : "white";
+            else {
+              if (incoming_refugee_data[currentYear][d.id]) {
+                if (outgoing_refugee_data[currentYear][d.id])
+                  return netDifferenceColors(
+                    outgoing_refugee_data[currentYear][d.id]["Count"] -
+                      incoming_refugee_data[currentYear][d.id]
+                  );
+                else
+                  return netDifferenceColors(
+                    -incoming_refugee_data[currentYear][d.id]
+                  );
+              } else {
+                if (outgoing_refugee_data[currentYear][d.id])
+                  return netDifferenceColors(
+                    outgoing_refugee_data[currentYear][d.id]["Count"]
+                  );
+                else return "white";
+              }
+            }
           });
         });
 
@@ -118,10 +176,34 @@ function Geomap() {
         .style("fill", function (d) {
           if (contentType == "None") return "white";
           else if (contentType == "Incoming refugees")
-            return incoming_refugee_data[currentYear][d.id] ? "blue" : "white";
+            return incoming_refugee_data[currentYear][d.id]
+              ? incomingColors(incoming_refugee_data[currentYear][d.id])
+              : "white";
           else if (contentType == "Outgoing refugees")
-            return outgoing_refugee_data[currentYear][d.id] ? "red" : "white";
-          else return "purple";
+            return outgoing_refugee_data[currentYear][d.id]
+              ? outgoingColors(
+                  outgoing_refugee_data[currentYear][d.id]["Count"]
+                )
+              : "white";
+          else {
+            if (incoming_refugee_data[currentYear][d.id]) {
+              if (outgoing_refugee_data[currentYear][d.id])
+                return netDifferenceColors(
+                  outgoing_refugee_data[currentYear][d.id]["Count"] -
+                    incoming_refugee_data[currentYear][d.id]
+                );
+              else
+                return netDifferenceColors(
+                  -incoming_refugee_data[currentYear][d.id]
+                );
+            } else {
+              if (outgoing_refugee_data[currentYear][d.id])
+                return netDifferenceColors(
+                  outgoing_refugee_data[currentYear][d.id]["Count"]
+                );
+              else return "white";
+            }
+          }
         })
         .style("stroke", "black")
         .on("click", function (d, i) {
@@ -135,7 +217,6 @@ function Geomap() {
         .on("mousemove", (event, d) => {
           tooltip
             .html(countryNames[d.id])
-            .style("fill", "blue")
             .style("left", `${event.pageX + 10}px`)
             .style("top", `${event.pageY - 10}px`);
         })
@@ -153,14 +234,16 @@ function Geomap() {
     <div className="flex">
       <svg className="w-3/5 h-[500px]" ref={geoRef}></svg>
       <svg className="w-1/5 h-[500px]" ref={sliderRef}></svg>
-      <form className="w-1/5 h-[500px] flex-col" defaultValue="None">
-        <select ref={dropdownRef}>
-          <option>None</option>
-          <option>Incoming refugees</option>
-          <option>Outgoing refugees</option>
-          <option>Net difference</option>
-        </select>
-      </form>
+      <div className="w-1/5 flex-col">
+        <form className="h-1/2" defaultValue="None">
+          <select ref={dropdownRef}>
+            <option>None</option>
+            <option>Incoming refugees</option>
+            <option>Outgoing refugees</option>
+            <option>Net difference</option>
+          </select>
+        </form>
+      </div>
     </div>
   );
 }

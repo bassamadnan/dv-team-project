@@ -44,16 +44,16 @@ function Geomap() {
       // color schemes
       var incomingColors = d3
         .scaleThreshold()
-        .domain([0, 100, 300, 600, 1000, 3000, 6000, 10000, 100000])
-        .range(d3.schemeYlGn[9]);
+        .domain([0, 3000, 10000, 50000, 100000, 500000, 1500000])
+        .range(d3.schemeYlGn[7]);
       var outgoingColors = d3
         .scaleThreshold()
-        .domain([0, 100, 300, 600, 1000, 3000, 6000, 10000, 100000])
-        .range(d3.schemeOrRd[9]);
+        .domain([0, 1000, 4000, 10000, 160000])
+        .range(d3.schemeOrRd[5]);
       var netDifferenceColors = d3
         .scaleThreshold()
-        .domain([0, 100, 300, 600, 1000, 3000, 6000, 10000, 100000])
-        .range(d3.schemeRdPu[9]);
+        .domain([-1500000, -100000, -10000, 0, 10000, 100000, 1500000])
+        .range(d3.schemeRdPu[7]);
 
       // tooltip
       var tooltip = d3
@@ -215,8 +215,27 @@ function Geomap() {
           tooltip.style("display", "block");
         })
         .on("mousemove", (event, d) => {
+          var content = "";
+          if (contentType == "None") content = "";
+          else if (contentType == "Incoming refugees")
+            content = incoming_refugee_data[currentYear][d.id]
+              ? incoming_refugee_data[currentYear][d.id]
+              : "0";
+          else if (contentType == "Outgoing refugees")
+            content = outgoing_refugee_data[currentYear][d.id]
+              ? outgoing_refugee_data[currentYear][d.id]["Count"]
+              : "0";
+          else
+            content = (
+              (outgoing_refugee_data[currentYear][d.id]
+                ? outgoing_refugee_data[currentYear][d.id]["Count"]
+                : 0) -
+              (incoming_refugee_data[currentYear][d.id]
+                ? incoming_refugee_data[currentYear][d.id]
+                : 0)
+            ).toString();
           tooltip
-            .html(countryNames[d.id])
+            .text(countryNames[d.id] + "\n" + contentType + ": " + content)
             .style("left", `${event.pageX + 10}px`)
             .style("top", `${event.pageY - 10}px`);
         })
@@ -232,9 +251,9 @@ function Geomap() {
 
   return (
     <div className="flex">
-      <svg className="w-3/5 h-[500px]" ref={geoRef}></svg>
-      <svg className="w-1/5 h-[500px]" ref={sliderRef}></svg>
-      <div className="w-1/5 flex-col">
+      <svg className="w-4/5 h-[500px]" ref={geoRef}></svg>
+      <svg className="w-1/10 h-[500px]" ref={sliderRef}></svg>
+      <div className="w-1/10 flex-col">
         <form className="h-1/2" defaultValue="None">
           <select ref={dropdownRef}>
             <option>None</option>

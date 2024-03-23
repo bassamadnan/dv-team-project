@@ -10,7 +10,7 @@ import {
 import { sliderRight, sliderBottom } from "d3-simple-slider";
 
 function Geomap() {
-  const { country, setCountry } = countryState();
+  const { country, setCountry, setCountryID } = countryState();
   const geoRef = useRef();
   const sliderRef = useRef();
   const dropdownRef = useRef();
@@ -60,17 +60,7 @@ function Geomap() {
         .select("body")
         .append("div")
         .attr("class", "tooltip")
-        .style("display", "none")
-        .style("background-color", "white")
-        .style("color", "black")
-        .style("border", "solid")
-        .style("border-width", "1px")
-        .style("border-radius", "5px")
-        .style("position", "absolute")
-        .style("pointer-events", "none")
-        .style("z", 10)
-        .style("padding", "5px")
-        .style("opacity", 0.75);
+   
 
       // year slider and type of content
       var currentYear = "2000";
@@ -209,7 +199,9 @@ function Geomap() {
         .on("click", function (d, i) {
           var url = "/" + countryNames[i.id];
           navigate(url);
+          tooltip.style("display", "none");
           setCountry(countryNames[i.id]);
+          setCountryID(i.id);
         })
         .on("mouseover", (event, d) => {
           tooltip.style("display", "block");

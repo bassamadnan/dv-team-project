@@ -4,11 +4,15 @@ const CountryContext = createContext();
 
 const CountryProvider = ({children}) => {
     const [country, setCountry] = useState(null);
+    const [ID, setCountryID] = useState(null);
+
     return (
         <CountryContext.Provider
             value={{
                 country,
-                setCountry
+                setCountry,
+                ID, 
+                setCountryID
             }}
         >
             {children}

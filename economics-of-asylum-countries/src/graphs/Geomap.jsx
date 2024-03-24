@@ -135,9 +135,7 @@ function Geomap() {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(`Country clicked ${country}`);
-  }, [country]);
+ 
 
   return (
     <div className="flex">

@@ -1,0 +1,19 @@
+{
+  "name": "leaflet-boundary-canvas",
+  "version": "1.0.0",
+  "description": "A fullscreen control for Leaflet",
+  "main": "src/BoundaryCanvas.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ttungbmt/leaflet-boundary-canvas"
+  },
+  "keywords": [
+    "leaflet",
+    "maps",
+    "boundary canvas",
+    "client"
+  ],
+  "author": "Truong Thanh TUng",
+  "license": "MIT License",
+  "readmeFilename": "README.md"
+}

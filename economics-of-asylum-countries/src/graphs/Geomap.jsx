@@ -8,6 +8,8 @@ import {
   outgoing_refugee_data,
 } from "../utils/data_parser.js";
 import { sliderRight, sliderBottom } from "d3-simple-slider";
+import { getFillColor } from "../utils/fillColor.js";
+import { getTooltipContent } from "../utils/tooltipString.js";
 
 function Geomap() {
   const { country, setCountry, setCountryID } = countryState();
@@ -77,36 +79,7 @@ function Geomap() {
           currentYear = event.toString();
 
           g.selectAll(".country").style("fill", function (d) {
-            if (contentType == "None") return "white";
-            else if (contentType == "Incoming refugees")
-              return incoming_refugee_data[currentYear][d.id]
-                ? incomingColors(incoming_refugee_data[currentYear][d.id])
-                : "white";
-            else if (contentType == "Outgoing refugees")
-              return outgoing_refugee_data[currentYear][d.id]
-                ? outgoingColors(
-                    outgoing_refugee_data[currentYear][d.id]["Count"]
-                  )
-                : "white";
-            else {
-              if (incoming_refugee_data[currentYear][d.id]) {
-                if (outgoing_refugee_data[currentYear][d.id])
-                  return netDifferenceColors(
-                    outgoing_refugee_data[currentYear][d.id]["Count"] -
-                      incoming_refugee_data[currentYear][d.id]
-                  );
-                else
-                  return netDifferenceColors(
-                    -incoming_refugee_data[currentYear][d.id]
-                  );
-              } else {
-                if (outgoing_refugee_data[currentYear][d.id])
-                  return netDifferenceColors(
-                    outgoing_refugee_data[currentYear][d.id]["Count"]
-                  );
-                else return "white";
-              }
-            }
+            return getFillColor(contentType, currentYear, incomingColors, outgoingColors, netDifferenceColors, d);
           });
         });
       var yearSlider = d3
@@ -122,36 +95,7 @@ function Geomap() {
           contentType = event.target.value;
 
           g.selectAll(".country").style("fill", function (d) {
-            if (contentType == "None") return "white";
-            else if (contentType == "Incoming refugees")
-              return incoming_refugee_data[currentYear][d.id]
-                ? incomingColors(incoming_refugee_data[currentYear][d.id])
-                : "white";
-            else if (contentType == "Outgoing refugees")
-              return outgoing_refugee_data[currentYear][d.id]
-                ? outgoingColors(
-                    outgoing_refugee_data[currentYear][d.id]["Count"]
-                  )
-                : "white";
-            else {
-              if (incoming_refugee_data[currentYear][d.id]) {
-                if (outgoing_refugee_data[currentYear][d.id])
-                  return netDifferenceColors(
-                    outgoing_refugee_data[currentYear][d.id]["Count"] -
-                      incoming_refugee_data[currentYear][d.id]
-                  );
-                else
-                  return netDifferenceColors(
-                    -incoming_refugee_data[currentYear][d.id]
-                  );
-              } else {
-                if (outgoing_refugee_data[currentYear][d.id])
-                  return netDifferenceColors(
-                    outgoing_refugee_data[currentYear][d.id]["Count"]
-                  );
-                else return "white";
-              }
-            }
+            return getFillColor(contentType, currentYear, incomingColors, outgoingColors, netDifferenceColors, d);
           });
         });
 
@@ -164,36 +108,8 @@ function Geomap() {
         .attr("class", "country")
         .attr("d", pathGenerator)
         .style("fill", function (d) {
-          if (contentType == "None") return "white";
-          else if (contentType == "Incoming refugees")
-            return incoming_refugee_data[currentYear][d.id]
-              ? incomingColors(incoming_refugee_data[currentYear][d.id])
-              : "white";
-          else if (contentType == "Outgoing refugees")
-            return outgoing_refugee_data[currentYear][d.id]
-              ? outgoingColors(
-                  outgoing_refugee_data[currentYear][d.id]["Count"]
-                )
-              : "white";
-          else {
-            if (incoming_refugee_data[currentYear][d.id]) {
-              if (outgoing_refugee_data[currentYear][d.id])
-                return netDifferenceColors(
-                  outgoing_refugee_data[currentYear][d.id]["Count"] -
-                    incoming_refugee_data[currentYear][d.id]
-                );
-              else
-                return netDifferenceColors(
-                  -incoming_refugee_data[currentYear][d.id]
-                );
-            } else {
-              if (outgoing_refugee_data[currentYear][d.id])
-                return netDifferenceColors(
-                  outgoing_refugee_data[currentYear][d.id]["Count"]
-                );
-              else return "white";
-            }
-          }
+          return getFillColor(contentType, currentYear, incomingColors, outgoingColors, netDifferenceColors, d);
+
         })
         .style("stroke", "black")
         .on("click", function (d, i) {
@@ -207,25 +123,7 @@ function Geomap() {
           tooltip.style("display", "block");
         })
         .on("mousemove", (event, d) => {
-          var content = "";
-          if (contentType == "None") content = "";
-          else if (contentType == "Incoming refugees")
-            content = incoming_refugee_data[currentYear][d.id]
-              ? incoming_refugee_data[currentYear][d.id]
-              : "0";
-          else if (contentType == "Outgoing refugees")
-            content = outgoing_refugee_data[currentYear][d.id]
-              ? outgoing_refugee_data[currentYear][d.id]["Count"]
-              : "0";
-          else
-            content = (
-              (outgoing_refugee_data[currentYear][d.id]
-                ? outgoing_refugee_data[currentYear][d.id]["Count"]
-                : 0) -
-              (incoming_refugee_data[currentYear][d.id]
-                ? incoming_refugee_data[currentYear][d.id]
-                : 0)
-            ).toString();
+          var content = getTooltipContent(contentType, currentYear, d);
           tooltip
             .text(countryNames[d.id] + "\n" + contentType + ": " + content)
             .style("left", `${event.pageX + 10}px`)

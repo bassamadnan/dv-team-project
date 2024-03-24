@@ -16,22 +16,30 @@ function Geomap() {
   const geoRef = useRef();
   const sliderRef = useRef();
   const dropdownRef = useRef();
+
   const navigate = useNavigate();
   useEffect(() => {
     // binding the svg using useRef
     const svg = d3.select(geoRef.current);
+    const parentWidth = geoRef.current.parentElement.clientWidth;
+    const parentHeight = geoRef.current.parentElement.clientHeight;
 
     // setting up projections
-    const projection = d3.geoMercator();
+    // https://d3js.org/d3-geo/cylindrical  geoEquirectangular, geoMercator,geoNaturalEarth1
+    const projection = d3
+      .geoEquirectangular()
+      .fitSize([parentWidth, parentHeight], { type: "Sphere" });
     const pathGenerator = d3.geoPath().projection(projection);
+    svg.selectAll("*").remove();
+
+    svg.attr("width", parentWidth).attr("height", parentHeight);
 
     const g = svg.append("g");
 
     // the background, this forms the ocean area
     g.append("path")
       .attr("class", "sphere")
-      .attr("d", pathGenerator({ type: "Sphere" }))
-      .style("fill", "#b7ddf4");
+      .attr("d", pathGenerator({ type: "Sphere" }));
 
     // parsing the country mapping data
     Promise.all([
@@ -58,18 +66,14 @@ function Geomap() {
         .range(d3.schemeRdPu[7]);
 
       // tooltip
-      var tooltip = d3
-        .select("body")
-        .append("div")
-        .attr("class", "tooltip")
-   
+      var tooltip = d3.select("body").append("div").attr("class", "tooltip");
 
       // year slider and type of content
       var currentYear = "2000";
       var contentType = "None";
       var slider = sliderRight()
         .min(2000)
-        .max(2023)
+        .max(2024)
         .step(1)
         .height(400)
         .default(2000)
@@ -79,23 +83,42 @@ function Geomap() {
           currentYear = event.toString();
 
           g.selectAll(".country").style("fill", function (d) {
-            return getFillColor(contentType, currentYear, incomingColors, outgoingColors, netDifferenceColors, d);
+            return getFillColor(
+              contentType,
+              currentYear,
+              incomingColors,
+              outgoingColors,
+              netDifferenceColors,
+              d
+            );
           });
         });
+      d3.select(sliderRef.current).selectAll(".yearSlider").remove();
+
       var yearSlider = d3
         .select(sliderRef.current)
         .append("svg")
         .attr("class", "yearSlider")
-        .attr("transform", "translate(50,50)")
-        .attr("height", 500)
+        .attr("height", 750)
         .call(slider);
+
+      yearSlider.selectAll(".tick text").attr("fill", "black");
+
+
       var contentTypeMenu = d3
         .select(dropdownRef.current)
         .on("change", (event) => {
           contentType = event.target.value;
 
           g.selectAll(".country").style("fill", function (d) {
-            return getFillColor(contentType, currentYear, incomingColors, outgoingColors, netDifferenceColors, d);
+            return getFillColor(
+              contentType,
+              currentYear,
+              incomingColors,
+              outgoingColors,
+              netDifferenceColors,
+              d
+            );
           });
         });
 
@@ -108,10 +131,15 @@ function Geomap() {
         .attr("class", "country")
         .attr("d", pathGenerator)
         .style("fill", function (d) {
-          return getFillColor(contentType, currentYear, incomingColors, outgoingColors, netDifferenceColors, d);
-
+          return getFillColor(
+            contentType,
+            currentYear,
+            incomingColors,
+            outgoingColors,
+            netDifferenceColors,
+            d
+          );
         })
-        .style("stroke", "black")
         .on("click", function (d, i) {
           var url = "/" + countryNames[i.id];
           navigate(url);
@@ -119,8 +147,13 @@ function Geomap() {
           setCountry(countryNames[i.id]);
           setCountryID(i.id);
         })
-        .on("mouseover", (event, d) => {
+        .on("mouseover", function (event, d) {
           tooltip.style("display", "block");
+          d3.select(this) // to be used without arrow functions !
+            .transition()
+            .duration(200)
+            .style("stroke", "black")
+            .style("stroke-width", "3px");
         })
         .on("mousemove", (event, d) => {
           var content = getTooltipContent(contentType, currentYear, d);
@@ -129,20 +162,34 @@ function Geomap() {
             .style("left", `${event.pageX + 10}px`)
             .style("top", `${event.pageY - 10}px`);
         })
-        .on("mouseleave", (event) => {
+        .on("mouseleave", function (event) {
           tooltip.style("display", "none");
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .style("stroke", "black")
+            .style("stroke-width", "1px");
         });
     });
   }, []);
 
- 
-
   return (
-    <div className="flex">
-      <svg className="w-4/5 h-[500px]" ref={geoRef}></svg>
-      <svg className="w-1/10 h-[500px]" ref={sliderRef}></svg>
-      <div className="w-1/10 flex-col">
-        <form className="h-1/2" defaultValue="None">
+    <div
+      className=""
+      style={{ position: "relative", width: "100vw", height: "100vh" }}
+    >
+      <svg ref={geoRef}></svg>
+
+      <div
+        className="flex flex-col"
+        style={{
+          position: "absolute",
+          top: "300px",
+          left: "10px",
+          color: "black",
+        }}
+      >
+        <form className="h-1/2" defaultValue="None" style={{width:"auto"}}>
           <select ref={dropdownRef}>
             <option>None</option>
             <option>Incoming refugees</option>
@@ -150,6 +197,9 @@ function Geomap() {
             <option>Net difference</option>
           </select>
         </form>
+        <div>
+          <svg className="h-[600px] mt-[50px]"  ref={sliderRef}></svg>
+        </div>
       </div>
     </div>
   );

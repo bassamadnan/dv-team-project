@@ -5,6 +5,7 @@ const CountryContext = createContext();
 const CountryProvider = ({children}) => {
     const [country, setCountry] = useState(null);
     const [ID, setCountryID] = useState(null);
+    const [year, setYear] = useState("2000");
 
     return (
         <CountryContext.Provider

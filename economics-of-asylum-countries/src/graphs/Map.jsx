@@ -7,7 +7,27 @@ import { countryState } from "../context/CountryProvider";
 import { sliderBottom, sliderRight } from "d3-simple-slider";
 import { getFillColor } from "../utils/fillColor";
 import { getStatistic } from "../utils/getStatistic";
-// https://stackoverflow.com/questions/50030269/react-leaflet-geojson-style-adapted-per-feature
+
+/*
+Flow of the code for this component 
+  1) First we pass in the country code as a Prop,
+  2) since the URL we are fetching requires the country code in alpha3 format, we fetch it from conversion json
+  3) After fetching, we set the geoJson data to the response and pass it to the map container which requires this as a prop
+  4) We ensure that the map is centralized around the bounding box of the country
+  5) Slider and fill color logic is same as the one used in Geomap for consistency
+  6) Instead of showing tooltip, we display it on the div directly
+
+  Below websites were reffered to while making this component
+
+  https://stackoverflow.com/questions/50030269/react-leaflet-geojson-style-adapted-per-feature
+  https://stackoverflow.com/questions/70945771/how-to-show-only-one-country-using-react-leaflet
+  https://stackoverflow.com/questions/46643086/leafletjs-only-show-one-country
+  https://stackoverflow.com/questions/66179826/how-to-display-json-in-d3-over-leaflet-js-in-react
+  https://codesandbox.io/examples/package/react-leaflet-d3
+
+*/
+
+
 const mapStyle = { height: "650px" };
 
 export default function Map({ countryCode }) {
@@ -51,7 +71,7 @@ export default function Map({ countryCode }) {
           `https://cdn.rawgit.com/johan/world.geo.json/34c96bba/countries/${countryCode}.geo.json`
         );
         const data = await response.json();
-        setGeoJSON(data);
+        setGeoJSON(data); // fetch the country gson 
       } catch (error) {
         console.error("GeoJSON error:", error);
       }
@@ -62,7 +82,7 @@ export default function Map({ countryCode }) {
   useEffect(() => {
     if (geoJSON) {
       const ukLayer = L.geoJSON(geoJSON);
-      const bounds = ukLayer.getBounds();
+      const bounds = ukLayer.getBounds(); // get the bounding box of country
       if (bounds.isValid()) {
         const center = bounds.getCenter();
         setCenterPosition([center.lat, center.lng]);
@@ -133,12 +153,13 @@ export default function Map({ countryCode }) {
     <div style={{ position: "relative" }}>
       {centerPosition && (
         <MapContainer
-          center={centerPosition}
+          center={centerPosition} // centere it on bounds
           zoom={3}
           style={mapStyle}
-          whenCreated={(mapInstance) => setMap(mapInstance)}
+          scrollWheelZoom={false}
+          whenCreated={(mapInstance) => setMap(mapInstance)} // create the map instance defined above
         >
-          {geoJSON && <GeoJSON data={geoJSON} style={countryStyle} />}
+          {geoJSON && <GeoJSON data={geoJSON} style={countryStyle} />} 
         </MapContainer>
       )}
       <div

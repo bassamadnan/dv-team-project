@@ -3,6 +3,17 @@ import * as d3 from "d3";
 import { countryState } from "../context/CountryProvider";
 import BarChartSelector from "./BarChartSelector";
 
+/*
+  Bar chart component which is the second div of the Country Page
+  Responsible for rendering the bar chart information everytime the selector value is changed
+  Logic below is commented to show what part is responsible for displaying what (rectangles, axes , tooltip etc...)
+  
+  Starter code and refferences were taken from below
+  https://kamibrumi.medium.com/getting-started-with-react-d3-js-d86ccea05f08
+  https://www.react-graph-gallery.com/barplot
+
+*/
+
 const BarChart = () => {
   const { currData, ID } = countryState();
   
@@ -24,7 +35,7 @@ const BarChart = () => {
       height = 600 - margin.top - margin.bottom;
 
     // remove previous SVG if exists
-    d3.select(ref.current).selectAll("*").remove();
+    d3.select(ref.current).selectAll("*").remove(); // if not done then the re-renders overlap !
 
     // append the svg object to the body of the page
     const svg = d3
@@ -98,7 +109,7 @@ const BarChart = () => {
       .on("mouseout", function () {
         tooltip.style("visibility", "hidden");
       });
-  }, [currData, ID]);
+  }, [currData, ID]); // rerender everytime the data and country changes
 
   return (
     <div style={{ background: "steelblue", color: "black", padding: "3px", border: "3px solid green", boxSizing: "border-box" }}>

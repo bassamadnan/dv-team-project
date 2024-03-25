@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { MapContainer, GeoJSON} from "react-leaflet";
+import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import * as d3 from "d3";
 import L from "leaflet";
 import { countryState } from "../context/CountryProvider";
 import { sliderBottom, sliderRight } from "d3-simple-slider";
 import { getFillColor } from "../utils/fillColor";
+import { getStatistic } from "../utils/getStatistic";
 // https://stackoverflow.com/questions/50030269/react-leaflet-geojson-style-adapted-per-feature
 const mapStyle = { height: "650px" };
 
@@ -121,8 +122,6 @@ export default function Map({ countryCode }) {
       color: "black", // border color
       dashArray: "3", // control dashes
       fillOpacity: 1, // opacity / transparency , more -> less transparent
-      
-      
     };
   };
 
@@ -131,7 +130,7 @@ export default function Map({ countryCode }) {
   };
 
   return (
-    <div style={{position:"relative"}}>
+    <div style={{ position: "relative" }}>
       {centerPosition && (
         <MapContainer
           center={centerPosition}
@@ -150,13 +149,22 @@ export default function Map({ countryCode }) {
         value={contentType}
         onChange={handleContentTypeChange}
         ref={dropdownRef}
-        style={{position:"absolute", top:"600px"}}
+        style={{ position: "absolute", top: "600px" }}
       >
         <option value="None">None</option>
         <option value="Incoming refugees">Incoming refugees</option>
         <option value="Outgoing refugees">Outgoing refugees</option>
         <option value="Net difference">Net difference</option>
       </select>
+      <div className="statistic text-xl">
+        {contentType !== "None" && (
+          <>
+            {contentType}:{" "}
+            {getStatistic(contentType, sliderValue.toString(), ID)}
+            {",\t Year"}: {sliderValue} 
+          </>
+        )}
+      </div>
     </div>
   );
 }

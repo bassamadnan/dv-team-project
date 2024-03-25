@@ -97,3 +97,13 @@ input:checked + .slider:before {
   fill: darkblue; /* change the fill color on hover */
   transition: fill 0.3s;
 }
+
+.statistic {
+  position: absolute;
+  top: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-weight: bold;
+}

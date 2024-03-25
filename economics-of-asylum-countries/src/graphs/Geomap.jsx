@@ -16,6 +16,7 @@ function Geomap() {
   const geoRef = useRef();
   const sliderRef = useRef();
   const dropdownRef = useRef();
+  const checkboxRef = useRef();
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -64,13 +65,27 @@ function Geomap() {
         .scaleThreshold()
         .domain([-1500000, -100000, -10000, 0, 10000, 100000, 1500000])
         .range(d3.schemeRdPu[7]);
+      var incomingColorsGrey = d3
+        .scaleThreshold()
+        .domain([0, 3000, 10000, 50000, 100000, 500000, 1500000])
+        .range(d3.schemeGreys[7]);
+      var outgoingColorsGrey = d3
+        .scaleThreshold()
+        .domain([0, 1000, 4000, 10000, 160000])
+        .range(d3.schemeGreys[5]);
+      var netDifferenceColorsGrey = d3
+        .scaleThreshold()
+        .domain([-1500000, -100000, -10000, 0, 10000, 100000, 1500000])
+        .range(d3.schemeGreys[7]);
 
       // tooltip
       var tooltip = d3.select("body").append("div").attr("class", "tooltip");
 
-      // year slider and type of content
       var currentYear = "2000";
       var contentType = "None";
+      var greyOrColor = "color";
+
+      // year slider
       var slider = sliderRight()
         .min(2000)
         .max(2024)
@@ -86,9 +101,13 @@ function Geomap() {
             return getFillColor(
               contentType,
               currentYear,
+              greyOrColor,
               incomingColors,
               outgoingColors,
               netDifferenceColors,
+              incomingColorsGrey,
+              outgoingColorsGrey,
+              netDifferenceColorsGrey,
               d
             );
           });
@@ -104,7 +123,7 @@ function Geomap() {
 
       yearSlider.selectAll(".tick text").attr("fill", "black");
 
-
+      // type of content
       var contentTypeMenu = d3
         .select(dropdownRef.current)
         .on("change", (event) => {
@@ -114,9 +133,35 @@ function Geomap() {
             return getFillColor(
               contentType,
               currentYear,
+              greyOrColor,
               incomingColors,
               outgoingColors,
               netDifferenceColors,
+              incomingColorsGrey,
+              outgoingColorsGrey,
+              netDifferenceColorsGrey,
+              d
+            );
+          });
+        });
+
+      // greyscale or colored
+      var greyOrColorOption = d3
+        .select(checkboxRef.current)
+        .on("change", (event) => {
+          greyOrColor = greyOrColor == "color" ? "grey" : "color";
+
+          g.selectAll(".country").style("fill", function (d) {
+            return getFillColor(
+              contentType,
+              currentYear,
+              greyOrColor,
+              incomingColors,
+              outgoingColors,
+              netDifferenceColors,
+              incomingColorsGrey,
+              outgoingColorsGrey,
+              netDifferenceColorsGrey,
               d
             );
           });
@@ -134,9 +179,13 @@ function Geomap() {
           return getFillColor(
             contentType,
             currentYear,
+            greyOrColor,
             incomingColors,
             outgoingColors,
             netDifferenceColors,
+            incomingColorsGrey,
+            outgoingColorsGrey,
+            netDifferenceColorsGrey,
             d
           );
         })
@@ -189,16 +238,20 @@ function Geomap() {
           color: "black",
         }}
       >
-        <form className="h-1/2" defaultValue="None" style={{width:"auto"}}>
+        <form className="h-1/2" defaultValue="None" style={{ width: "auto" }}>
           <select ref={dropdownRef}>
             <option>None</option>
             <option>Incoming refugees</option>
             <option>Outgoing refugees</option>
             <option>Net difference</option>
           </select>
+          <label className="switch">
+            <input type="checkbox" ref={checkboxRef}></input>
+            <span className="slider round"></span>
+          </label>
         </form>
         <div>
-          <svg className="h-[600px] mt-[50px]"  ref={sliderRef}></svg>
+          <svg className="h-[600px] mt-[50px]" ref={sliderRef}></svg>
         </div>
       </div>
     </div>

@@ -1,37 +1,55 @@
 import { incoming_refugee_data, outgoing_refugee_data } from "./data_parser";
 
-
 export const getFillColor = (
   contentType,
   currentYear,
+  greyOrColor,
   incomingColors,
   outgoingColors,
   netDifferenceColors,
+  incomingColorsGrey,
+  outgoingColorsGrey,
+  netDifferenceColorsGrey,
   d
 ) => {
   if (contentType == "None") return "white";
   else if (contentType == "Incoming refugees")
     return incoming_refugee_data[currentYear][d.id]
-      ? incomingColors(incoming_refugee_data[currentYear][d.id])
+      ? greyOrColor == "grey"
+        ? incomingColorsGrey(incoming_refugee_data[currentYear][d.id])
+        : incomingColors(incoming_refugee_data[currentYear][d.id])
       : "white";
   else if (contentType == "Outgoing refugees")
     return outgoing_refugee_data[currentYear][d.id]
-      ? outgoingColors(outgoing_refugee_data[currentYear][d.id]["Count"])
+      ? greyOrColor == "grey"
+        ? outgoingColorsGrey(outgoing_refugee_data[currentYear][d.id]["Count"])
+        : outgoingColors(outgoing_refugee_data[currentYear][d.id]["Count"])
       : "white";
   else {
     if (incoming_refugee_data[currentYear][d.id]) {
       if (outgoing_refugee_data[currentYear][d.id])
-        return netDifferenceColors(
-          outgoing_refugee_data[currentYear][d.id]["Count"] -
-            incoming_refugee_data[currentYear][d.id]
-        );
+        return greyOrColor == "grey"
+          ? netDifferenceColorsGrey(
+              outgoing_refugee_data[currentYear][d.id]["Count"] -
+                incoming_refugee_data[currentYear][d.id]
+            )
+          : netDifferenceColors(
+              outgoing_refugee_data[currentYear][d.id]["Count"] -
+                incoming_refugee_data[currentYear][d.id]
+            );
       else
-        return netDifferenceColors(-incoming_refugee_data[currentYear][d.id]);
+        return greyOrColor == "grey"
+          ? netDifferenceColorsGrey(-incoming_refugee_data[currentYear][d.id])
+          : netDifferenceColors(-incoming_refugee_data[currentYear][d.id]);
     } else {
       if (outgoing_refugee_data[currentYear][d.id])
-        return netDifferenceColors(
-          outgoing_refugee_data[currentYear][d.id]["Count"]
-        );
+        return greyOrColor == "grey"
+          ? netDifferenceColorsGrey(
+              outgoing_refugee_data[currentYear][d.id]["Count"]
+            )
+          : netDifferenceColors(
+              outgoing_refugee_data[currentYear][d.id]["Count"]
+            );
       else return "white";
     }
   }

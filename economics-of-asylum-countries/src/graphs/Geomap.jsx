@@ -17,6 +17,7 @@ function Geomap() {
   const sliderRef = useRef();
   const dropdownRef = useRef();
   const checkboxRef = useRef();
+  const legendRef = useRef();
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -84,6 +85,7 @@ function Geomap() {
       var currentYear = "2000";
       var contentType = "None";
       var greyOrColor = "color";
+      var legendData, legendColors;
 
       // year slider
       var slider = sliderRight()
@@ -143,6 +145,65 @@ function Geomap() {
               d
             );
           });
+
+          switch (contentType) {
+            case "Incoming refugees":
+              legendData = incomingColors.domain();
+              legendColors =
+                greyOrColor == "grey"
+                  ? incomingColorsGrey.range()
+                  : incomingColors.range();
+              break;
+            case "Outgoing refugees":
+              legendData = outgoingColors.domain();
+              legendColors =
+                greyOrColor == "grey"
+                  ? outgoingColorsGrey.range()
+                  : outgoingColors.range();
+              break;
+            case "Net difference":
+              legendData = netDifferenceColors.domain();
+              legendColors =
+                greyOrColor == "grey"
+                  ? netDifferenceColorsGrey.range()
+                  : netDifferenceColors.range();
+              break;
+            default:
+              legendData = [0];
+              legendColors = ["#ffffff"];
+              break;
+          }
+
+          g2.selectAll("*").remove();
+
+          g2.selectAll("path")
+            .data(legendData)
+            .enter()
+            .append("circle")
+            .attr("cx", 20)
+            .attr("cy", function (d, i) {
+              return 20 + i * 25;
+            })
+            .attr("r", 8)
+            .attr("fill", function (d, i) {
+              return legendColors[i];
+            })
+            .attr("stroke", "black")
+            .attr("position", "relative");
+          g2.selectAll("label")
+            .data(legendData)
+            .enter()
+            .append("text")
+            .attr("x", 40)
+            .attr("y", function (d, i) {
+              return 25 + i * 25;
+            })
+            .attr("font-size", "16px")
+            .text(function (d, i) {
+              if (contentType == "None") return "0";
+              if (i == legendData.length - 1) return d + "+";
+              else return d + " - " + legendData[i + 1];
+            });
         });
 
       // greyscale or colored
@@ -165,6 +226,49 @@ function Geomap() {
               d
             );
           });
+
+          switch (contentType) {
+            case "Incoming refugees":
+              legendData = incomingColors.domain();
+              legendColors =
+                greyOrColor == "grey"
+                  ? incomingColorsGrey.range()
+                  : incomingColors.range();
+              break;
+            case "Outgoing refugees":
+              legendData = outgoingColors.domain();
+              legendColors =
+                greyOrColor == "grey"
+                  ? outgoingColorsGrey.range()
+                  : outgoingColors.range();
+              break;
+            case "Net difference":
+              legendData = netDifferenceColors.domain();
+              legendColors =
+                greyOrColor == "grey"
+                  ? netDifferenceColorsGrey.range()
+                  : netDifferenceColors.range();
+              break;
+            default:
+              legendData = [0];
+              legendColors = ["#ffffff"];
+              break;
+          }
+
+          g2.selectAll("path")
+            .data(legendData)
+            .enter()
+            .append("circle")
+            .attr("cx", 20)
+            .attr("cy", function (d, i) {
+              return 20 + i * 25;
+            })
+            .attr("r", 8)
+            .attr("fill", function (d, i) {
+              return legendColors[i];
+            })
+            .attr("stroke", "black")
+            .attr("position", "relative");
         });
 
       // rendering the paths for each country
@@ -219,6 +323,64 @@ function Geomap() {
             .style("stroke", "black")
             .style("stroke-width", "1px");
         });
+
+      switch (contentType) {
+        case "Incoming refugees":
+          legendData = incomingColors.domain();
+          legendColors =
+            greyOrColor == "grey"
+              ? incomingColorsGrey.range()
+              : incomingColors.range();
+          break;
+        case "Outgoing refugees":
+          legendData = outgoingColors.domain();
+          legendColors =
+            greyOrColor == "grey"
+              ? outgoingColorsGrey.range()
+              : outgoingColors.range();
+          break;
+        case "Net difference":
+          legendData = netDifferenceColors.domain();
+          legendColors =
+            greyOrColor == "grey"
+              ? netDifferenceColorsGrey.range()
+              : netDifferenceColors.range();
+          break;
+        default:
+          legendData = [0];
+          legendColors = ["#ffffff"];
+          break;
+      }
+
+      var g2 = d3.select(legendRef.current).append("g");
+      g2.selectAll("path")
+        .data(legendData)
+        .enter()
+        .append("circle")
+        .attr("cx", 20)
+        .attr("cy", function (d, i) {
+          return 20 + i * 25;
+        })
+        .attr("r", 8)
+        .attr("fill", function (d, i) {
+          return legendColors[i];
+        })
+        .attr("stroke", "black")
+        .attr("position", "relative");
+      g2.selectAll("label")
+        .data(legendData)
+        .enter()
+        .append("text")
+        .attr("x", 40)
+        .attr("y", function (d, i) {
+          return 25 + i * 25;
+        })
+        .attr("font-size", "16px")
+        .text(function (d, i) {
+          if (contentType == "None") return "0";
+          if (i == legendData.length - 1) return d + "+";
+          else return d + " - " + legendData[i + 1];
+        });
     });
   }, []);
 
@@ -253,6 +415,19 @@ function Geomap() {
         <div>
           <svg className="h-[600px] mt-[50px]" ref={sliderRef}></svg>
         </div>
+        <svg
+          id="legend"
+          style={{
+            position: "absolute",
+            top: "500px",
+            left: "5px",
+            height: "195px",
+            width: "175px",
+            border: "2px solid black",
+            borderRadius: "10px",
+          }}
+          ref={legendRef}
+        ></svg>
       </div>
     </div>
   );

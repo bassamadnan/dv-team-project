@@ -1,14 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { countryState } from "../context/CountryProvider";
-import { gdp_data } from "../utils/data_parser";
-// https://kamibrumi.medium.com/getting-started-with-react-d3-js-d86ccea05f08 <- started code
-
+import BarChartSelector from "./BarChartSelector";
 
 const BarChart = () => {
-  const { ID } = countryState();
+  const { currData, ID } = countryState();
+  
+  if (!currData || !currData[ID]) return <h1> No Data present !</h1>;
+  
   const ref = useRef();
-  const curr_data = gdp_data[ID];
+  const curr_data = currData[ID];
   const data = [];
 
   for (const year of curr_data.present) {
@@ -16,13 +17,14 @@ const BarChart = () => {
     data.push({ Year: year, Value: value });
   }
 
-  // console.log(data);
-
   useEffect(() => {
     // set the dimensions and margins of the graph
     const margin = { top: 30, right: 30, bottom: 70, left: 60 },
       width = 800 - margin.left - margin.right,
       height = 600 - margin.top - margin.bottom;
+
+    // remove previous SVG if exists
+    d3.select(ref.current).selectAll("*").remove();
 
     // append the svg object to the body of the page
     const svg = d3
@@ -96,11 +98,12 @@ const BarChart = () => {
       .on("mouseout", function () {
         tooltip.style("visibility", "hidden");
       });
-  }, []);
+  }, [currData, ID]);
 
   return (
-    <div style={{"background": "steelblue", color:"black"}}>
-      <svg width={800} height={600} id="barchart" ref={ref} />
+    <div style={{ background: "steelblue", color: "black", padding: "3px", border: "3px solid green", boxSizing: "border-box" }}>
+      <BarChartSelector />
+      <svg width={800} height={600} id="barchart" ref={ref}/>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { gdp_data } from "../utils/data_parser";
 
 const CountryContext = createContext();
 
@@ -6,14 +7,15 @@ const CountryProvider = ({children}) => {
     const [country, setCountry] = useState(null);
     const [ID, setCountryID] = useState(null);
     const [year, setYear] = useState("2000");
-
+    const [currData, setCurrData] = useState(gdp_data);
     return (
         <CountryContext.Provider
             value={{
                 country,
                 setCountry,
                 ID, 
-                setCountryID
+                setCountryID, currData,
+                setCurrData
             }}
         >
             {children}

@@ -17,7 +17,11 @@ const CountryPage = () => {
       <div>
         <BarChart />
       </div>
-      <div>4 </div>
+      <div>
+        <h1 className="text-3xl font-bold underline" style={{color:"blue"}}>
+          Thank You !
+        </h1>
+      </div>
       <div><LineChart /> </div>
     </div>
   );

@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import { MapContainer, GeoJSON } from "react-leaflet";
+import { MapContainer, GeoJSON} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import * as d3 from "d3";
 import L from "leaflet";
 import { countryState } from "../context/CountryProvider";
 import { sliderBottom, sliderRight } from "d3-simple-slider";
 import { getFillColor } from "../utils/fillColor";
-
-const mapStyle = { height: "600px" };
+// https://stackoverflow.com/questions/50030269/react-leaflet-geojson-style-adapted-per-feature
+const mapStyle = { height: "650px" };
 
 export default function Map({ countryCode }) {
   const { ID } = countryState();
@@ -30,6 +30,18 @@ export default function Map({ countryCode }) {
     .scaleThreshold()
     .domain([-1500000, -100000, -10000, 0, 10000, 100000, 1500000])
     .range(d3.schemeRdPu[7]);
+  var incomingColorsGrey = d3
+    .scaleThreshold()
+    .domain([0, 3000, 10000, 50000, 100000, 500000, 1500000])
+    .range(d3.schemeGreys[7]);
+  var outgoingColorsGrey = d3
+    .scaleThreshold()
+    .domain([0, 1000, 4000, 10000, 160000])
+    .range(d3.schemeGreys[5]);
+  var netDifferenceColorsGrey = d3
+    .scaleThreshold()
+    .domain([-1500000, -100000, -10000, 0, 10000, 100000, 1500000])
+    .range(d3.schemeGreys[7]);
 
   useEffect(() => {
     const fetchGeoJSON = async () => {
@@ -85,20 +97,32 @@ export default function Map({ countryCode }) {
   }, []);
 
   const getCountryColor = () => {
-    const sval = sliderValue.toString()
-    const temp_dict = {id: ID};
-    return getFillColor(contentType, sval, incomingColors, outgoingColors, netDifferenceColors, temp_dict);
-   
+    const sval = sliderValue.toString();
+    const temp_dict = { id: ID };
+    return getFillColor(
+      contentType,
+      sval,
+      "color",
+      incomingColors,
+      outgoingColors,
+      netDifferenceColors,
+      incomingColorsGrey,
+      outgoingColorsGrey,
+      netDifferenceColorsGrey,
+      temp_dict
+    );
   };
 
-  const countryStyle = (feature) => {
+  const countryStyle = () => {
     return {
-      fillColor: getCountryColor(),
-      weight: 2,
-      opacity: 1,
-      color: "white",
-      dashArray: "3",
-      fillOpacity: 0.7,
+      fillColor: getCountryColor(), // country color
+      weight: 3, // border darkness
+      opacity: 1, // opacity
+      color: "black", // border color
+      dashArray: "3", // control dashes
+      fillOpacity: 1, // opacity / transparency , more -> less transparent
+      
+      
     };
   };
 
@@ -107,7 +131,7 @@ export default function Map({ countryCode }) {
   };
 
   return (
-    <>
+    <div style={{position:"relative"}}>
       {centerPosition && (
         <MapContainer
           center={centerPosition}
@@ -126,12 +150,13 @@ export default function Map({ countryCode }) {
         value={contentType}
         onChange={handleContentTypeChange}
         ref={dropdownRef}
+        style={{position:"absolute", top:"600px"}}
       >
         <option value="None">None</option>
         <option value="Incoming refugees">Incoming refugees</option>
         <option value="Outgoing refugees">Outgoing refugees</option>
         <option value="Net difference">Net difference</option>
       </select>
-    </>
+    </div>
   );
 }

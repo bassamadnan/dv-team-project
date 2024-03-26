@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { gdp_data } from "../utils/data_parser";
 
+// keeps track of the country selected 
+
 const CountryContext = createContext();
 
 const CountryProvider = ({children}) => {

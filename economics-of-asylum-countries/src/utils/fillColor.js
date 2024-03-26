@@ -1,5 +1,8 @@
 import { incoming_refugee_data, outgoing_refugee_data } from "./data_parser";
 
+// given the colorschemes, the type of data in use, the year, and the data point
+// returns the color to be used for the country
+
 export const getFillColor = (
   contentType,
   currentYear,

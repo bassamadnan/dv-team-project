@@ -1,5 +1,6 @@
 import { incoming_refugee_data, outgoing_refugee_data } from "./data_parser";
 
+// returns the contents of the tooltip given the content type, year, country data point
 
 export const getTooltipContent = (contentType, currentYear, d) => {
   var content = "";

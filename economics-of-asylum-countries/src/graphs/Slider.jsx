@@ -5,9 +5,10 @@ import { countryState } from "../context/CountryProvider";
 
 function Slider() {
   const sliderRef = useRef();
- const {year, setYear} = countryState();
+  const { year, setYear } = countryState();
   useEffect(() => {
     var currentYear = "2000";
+    // setting up slider for geomap
     var slider = sliderRight()
       .min(2000)
       .max(2023)
@@ -20,21 +21,19 @@ function Slider() {
         currentYear = event.toString();
         setYear(currentYear);
       });
-  
-    d3.select(sliderRef.current)
-      .selectAll(".yearSlider")
-      .remove(); 
-  
+
+    d3.select(sliderRef.current).selectAll(".yearSlider").remove();
+
     d3.select(sliderRef.current)
       .append("svg")
       .attr("class", "yearSlider")
       .attr("transform", "translate(50,50)")
       .attr("height", 500)
-      .call(slider); 
+      .call(slider);
   }, []);
   return (
     <div>
-        test1
+      test1
       <svg className="w-1/10 h-[500px] text-black" ref={sliderRef}></svg>
       test
     </div>

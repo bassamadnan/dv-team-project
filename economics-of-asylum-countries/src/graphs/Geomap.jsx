@@ -311,7 +311,22 @@ function Geomap() {
         .on("mousemove", (event, d) => {
           var content = getTooltipContent(contentType, currentYear, d);
           tooltip
-            .text(countryNames[d.id] + "\n" + contentType + ": " + content)
+            .html(
+              contentType == "None"
+                ? countryNames[d.id]
+                : countryNames[d.id] +
+                    "<br>" +
+                    contentType +
+                    ": " +
+                    content +
+                    "<br>" +
+                    (contentType == "Net difference"
+                      ? "Incoming refugees : " +
+                        getTooltipContent("Incoming refugees", currentYear, d) +
+                        "<br> Outgoing refugees : " +
+                        getTooltipContent("Outgoing refugees", currentYear, d)
+                      : "")
+            )
             .style("left", `${event.pageX + 10}px`)
             .style("top", `${event.pageY - 10}px`);
         })

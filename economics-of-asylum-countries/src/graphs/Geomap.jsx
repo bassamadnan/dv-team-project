@@ -411,14 +411,14 @@ function Geomap() {
   return (
     <div
       className=""
-      style={{ position: "relative", width: "80vw", height: "90vh" }}
+      style={{ position: "relative", width: "75vw", height: "85vh" }}
     >
       <svg ref={geoRef}></svg>
       <p
         style={{
           position: "absolute",
           top: "1.2vh",
-          left: "81vw",
+          left: "76vw",
           fontSize: "1.5vw",
         }}
       >
@@ -429,7 +429,7 @@ function Geomap() {
         style={{
           position: "absolute",
           top: "7.2vh",
-          left: "81vw",
+          left: "76vw",
           height: "195px",
           width: "175px",
           border: "2px solid black",
@@ -442,7 +442,7 @@ function Geomap() {
         style={{
           position: "absolute",
           top: `calc(9.2vh + 195px)`,
-          left: "81vw",
+          left: "76vw",
           width: "15vw",
           fontSize: "1.2vw",
         }}
@@ -454,9 +454,11 @@ function Geomap() {
           ref={dropdownRef}
           style={{
             position: "absolute",
-            top: `calc(15.2vh + 195px)`,
-            left: "81vw",
+            top: `calc(13.7vh + 195px)`,
+            left: "76vw",
             width: "175px",
+            height: "5vh",
+            paddingLeft: "0.5vw"
           }}
         >
           <option>None</option>
@@ -469,7 +471,7 @@ function Geomap() {
           style={{
             position: "absolute",
             top: `calc(19.6vh + 195px)`,
-            left: "81vw",
+            left: "76vw",
           }}
         >
           <input type="checkbox" ref={checkboxRef}></input>
@@ -483,7 +485,7 @@ function Geomap() {
         style={{
           position: "absolute",
           top: "1.2vh",
-          left: `calc(83vw + 175px)`,
+          left: `calc(81vw + 175px)`,
           fontSize: "1.2vw",
         }}
       >
@@ -494,7 +496,7 @@ function Geomap() {
         style={{
           position: "absolute",
           top: "14.2vh",
-          left: `calc(83vw + 175px)`,
+          left: `calc(81vw + 175px)`,
           height: "600px",
         }}
       ></svg>
@@ -503,7 +505,7 @@ function Geomap() {
         style={{
           position: "absolute",
           top: "75vh",
-          left: "81vw",
+          left: "76vw",
           width: "18vw",
           fontSize: "3vh",
         }}

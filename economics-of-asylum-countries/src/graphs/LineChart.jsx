@@ -120,7 +120,7 @@ const LineChart = () => {
     // Add legend items
     legend
       .append("rect")
-      .attr("x", 0)
+      .attr("x", width - 200 - 30)
       .attr("y", 0)
       .attr("width", 20)
       .attr("height", 20)
@@ -128,14 +128,14 @@ const LineChart = () => {
 
     legend
       .append("text")
-      .attr("x", 30)
+      .attr("x", width - 200)
       .attr("y", 10)
       .attr("dy", "0.35em")
       .text("Unemployment Rates");
 
     legend
       .append("rect")
-      .attr("x", 0)
+      .attr("x", width - 200-30)
       .attr("y", 30)
       .attr("width", 20)
       .attr("height", 20)
@@ -143,14 +143,14 @@ const LineChart = () => {
 
     legend
       .append("text")
-      .attr("x", 30)
+      .attr("x", width - 200)
       .attr("y", 40)
       .attr("dy", "0.35em")
       .text("Debt as percentage of gdp");
 
     legend
       .append("rect")
-      .attr("x", 0)
+      .attr("x", width - 200 - 30)
       .attr("y", 60)
       .attr("width", 20)
       .attr("height", 20)
@@ -158,7 +158,7 @@ const LineChart = () => {
 
     legend
       .append("text")
-      .attr("x", 30)
+      .attr("x", width - 200)
       .attr("y", 70)
       .attr("dy", "0.35em")
       .text("Inflation rate");

@@ -28,10 +28,10 @@ const CountryPage = () => {
         <BarChart />
       </div>
       <div>
-        {/* <h1 className="text-3xl font-bold underline" style={{ color: "blue" }}>
+        <h1 className="text-3xl font-bold underline" style={{ color: "blue" }}>
           Thank You !
-        </h1> */}
-        <BarChartComparison />
+        </h1>
+        {/* <BarChartComparison /> */}
       </div>
       <div>
         <LineChart />

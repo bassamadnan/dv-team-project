@@ -99,20 +99,23 @@ function Geomap() {
         .on("onchange", (event) => {
           currentYear = event.toString();
 
-          g.selectAll(".country").style("fill", function (d) {
-            return getFillColor(
-              contentType,
-              currentYear,
-              greyOrColor,
-              incomingColors,
-              outgoingColors,
-              netDifferenceColors,
-              incomingColorsGrey,
-              outgoingColorsGrey,
-              netDifferenceColorsGrey,
-              d
-            );
-          });
+          g.selectAll(".country")
+            .transition()
+            .duration(500)
+            .style("fill", function (d) {
+              return getFillColor(
+                contentType,
+                currentYear,
+                greyOrColor,
+                incomingColors,
+                outgoingColors,
+                netDifferenceColors,
+                incomingColorsGrey,
+                outgoingColorsGrey,
+                netDifferenceColorsGrey,
+                d
+              );
+            });
         });
       d3.select(sliderRef.current).selectAll(".yearSlider").remove();
 
@@ -131,20 +134,23 @@ function Geomap() {
         .on("change", (event) => {
           contentType = event.target.value;
 
-          g.selectAll(".country").style("fill", function (d) {
-            return getFillColor(
-              contentType,
-              currentYear,
-              greyOrColor,
-              incomingColors,
-              outgoingColors,
-              netDifferenceColors,
-              incomingColorsGrey,
-              outgoingColorsGrey,
-              netDifferenceColorsGrey,
-              d
-            );
-          });
+          g.selectAll(".country")
+            .transition()
+            .duration(500)
+            .style("fill", function (d) {
+              return getFillColor(
+                contentType,
+                currentYear,
+                greyOrColor,
+                incomingColors,
+                outgoingColors,
+                netDifferenceColors,
+                incomingColorsGrey,
+                outgoingColorsGrey,
+                netDifferenceColorsGrey,
+                d
+              );
+            });
 
           switch (contentType) {
             case "Incoming refugees":
@@ -212,20 +218,23 @@ function Geomap() {
         .on("change", (event) => {
           greyOrColor = greyOrColor == "color" ? "grey" : "color";
 
-          g.selectAll(".country").style("fill", function (d) {
-            return getFillColor(
-              contentType,
-              currentYear,
-              greyOrColor,
-              incomingColors,
-              outgoingColors,
-              netDifferenceColors,
-              incomingColorsGrey,
-              outgoingColorsGrey,
-              netDifferenceColorsGrey,
-              d
-            );
-          });
+          g.selectAll(".country")
+            .transition()
+            .duration(500)
+            .style("fill", function (d) {
+              return getFillColor(
+                contentType,
+                currentYear,
+                greyOrColor,
+                incomingColors,
+                outgoingColors,
+                netDifferenceColors,
+                incomingColorsGrey,
+                outgoingColorsGrey,
+                netDifferenceColorsGrey,
+                d
+              );
+            });
 
           switch (contentType) {
             case "Incoming refugees":

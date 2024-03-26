@@ -175,8 +175,8 @@ function Geomap() {
                   : netDifferenceColors.range();
               break;
             default:
-              legendData = [0];
-              legendColors = ["#ffffff"];
+              legendData = [];
+              legendColors = [];
               break;
           }
 
@@ -206,7 +206,6 @@ function Geomap() {
             })
             .attr("font-size", "16px")
             .text(function (d, i) {
-              if (contentType == "None") return "0";
               if (i == legendData.length - 1) return d + "+";
               else return d + " - " + legendData[i + 1];
             });
@@ -259,8 +258,8 @@ function Geomap() {
                   : netDifferenceColors.range();
               break;
             default:
-              legendData = [0];
-              legendColors = ["#ffffff"];
+              legendData = [];
+              legendColors = [];
               break;
           }
 
@@ -322,8 +321,10 @@ function Geomap() {
           tooltip
             .html(
               contentType == "None"
-                ? countryNames[d.id]
+                ? countryNames[d.id] + "<br> Year: " + currentYear
                 : countryNames[d.id] +
+                    "<br> Year: " +
+                    currentYear +
                     "<br>" +
                     contentType +
                     ": " +
@@ -371,8 +372,8 @@ function Geomap() {
               : netDifferenceColors.range();
           break;
         default:
-          legendData = [0];
-          legendColors = ["#ffffff"];
+          legendData = [];
+          legendColors = [];
           break;
       }
 
@@ -401,7 +402,6 @@ function Geomap() {
         })
         .attr("font-size", "16px")
         .text(function (d, i) {
-          if (contentType == "None") return "0";
           if (i == legendData.length - 1) return d + "+";
           else return d + " - " + legendData[i + 1];
         });
@@ -414,12 +414,21 @@ function Geomap() {
       style={{ position: "relative", width: "80vw", height: "90vh" }}
     >
       <svg ref={geoRef}></svg>
-
+      <p
+        style={{
+          position: "absolute",
+          top: "1.2vh",
+          left: "81vw",
+          fontSize: "1.5vw",
+        }}
+      >
+        Legend
+      </p>
       <svg
         id="legend"
         style={{
           position: "absolute",
-          top: "1.2vh",
+          top: "7.2vh",
           left: "81vw",
           height: "195px",
           width: "175px",
@@ -429,12 +438,23 @@ function Geomap() {
         ref={legendRef}
       ></svg>
 
+      <p
+        style={{
+          position: "absolute",
+          top: `calc(9.2vh + 195px)`,
+          left: "81vw",
+          width: "15vw",
+          fontSize: "1.2vw",
+        }}
+      >
+        Choose content type:{" "}
+      </p>
       <form className="" defaultValue="None" style={{ width: "auto" }}>
         <select
           ref={dropdownRef}
           style={{
             position: "absolute",
-            top: `calc(3.2vh + 195px)`,
+            top: `calc(15.2vh + 195px)`,
             left: "81vw",
             width: "175px",
           }}
@@ -448,26 +468,48 @@ function Geomap() {
           className="switch"
           style={{
             position: "absolute",
-            top: `calc(8vh + 195px)`,
+            top: `calc(19.6vh + 195px)`,
             left: "81vw",
           }}
         >
           <input type="checkbox" ref={checkboxRef}></input>
           <span className="slider round"></span>
-          <p style={{ paddingTop: "1vh", width: "10vw" }}>
+          <p style={{ width: "12vw", fontSize: "1.2vw", paddingTop: "2vh" }}>
             Toggle between coloured and greyscale view
           </p>
         </label>
       </form>
-      <svg
-        ref={sliderRef}
+      <p
         style={{
           position: "absolute",
           top: "1.2vh",
           left: `calc(83vw + 175px)`,
+          fontSize: "1.2vw",
+        }}
+      >
+        Choose the year:
+      </p>
+      <svg
+        ref={sliderRef}
+        style={{
+          position: "absolute",
+          top: "14.2vh",
+          left: `calc(83vw + 175px)`,
           height: "600px",
         }}
       ></svg>
+      <p
+        className="text-center"
+        style={{
+          position: "absolute",
+          top: "75vh",
+          left: "81vw",
+          width: "18vw",
+          fontSize: "3vh",
+        }}
+      >
+        Hover over a country to see the statistics
+      </p>
     </div>
   );
 }

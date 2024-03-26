@@ -411,48 +411,63 @@ function Geomap() {
   return (
     <div
       className=""
-      style={{ position: "relative", width: "100vw", height: "100vh" }}
+      style={{ position: "relative", width: "80vw", height: "90vh" }}
     >
       <svg ref={geoRef}></svg>
 
-      <div
-        className="flex flex-col"
+      <svg
+        id="legend"
         style={{
           position: "absolute",
-          top: "300px",
-          left: "10px",
-          color: "black",
+          top: "1.2vh",
+          left: "81vw",
+          height: "195px",
+          width: "175px",
+          border: "2px solid black",
+          borderRadius: "10px",
         }}
-      >
-        <form className="h-1/2" defaultValue="None" style={{ width: "auto" }}>
-          <select ref={dropdownRef}>
-            <option>None</option>
-            <option>Incoming refugees</option>
-            <option>Outgoing refugees</option>
-            <option>Net difference</option>
-          </select>
-          <label className="switch">
-            <input type="checkbox" ref={checkboxRef}></input>
-            <span className="slider round"></span>
-          </label>
-        </form>
-        <div>
-          <svg className="h-[600px] mt-[50px]" ref={sliderRef}></svg>
-        </div>
-        <svg
-          id="legend"
+        ref={legendRef}
+      ></svg>
+
+      <form className="" defaultValue="None" style={{ width: "auto" }}>
+        <select
+          ref={dropdownRef}
           style={{
             position: "absolute",
-            top: "500px",
-            left: "5px",
-            height: "195px",
+            top: `calc(3.2vh + 195px)`,
+            left: "81vw",
             width: "175px",
-            border: "2px solid black",
-            borderRadius: "10px",
           }}
-          ref={legendRef}
-        ></svg>
-      </div>
+        >
+          <option>None</option>
+          <option>Incoming refugees</option>
+          <option>Outgoing refugees</option>
+          <option>Net difference</option>
+        </select>
+        <label
+          className="switch"
+          style={{
+            position: "absolute",
+            top: `calc(8vh + 195px)`,
+            left: "81vw",
+          }}
+        >
+          <input type="checkbox" ref={checkboxRef}></input>
+          <span className="slider round"></span>
+          <p style={{ paddingTop: "1vh", width: "10vw" }}>
+            Toggle between coloured and greyscale view
+          </p>
+        </label>
+      </form>
+      <svg
+        ref={sliderRef}
+        style={{
+          position: "absolute",
+          top: "1.2vh",
+          left: `calc(83vw + 175px)`,
+          height: "600px",
+        }}
+      ></svg>
     </div>
   );
 }

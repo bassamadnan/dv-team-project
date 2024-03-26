@@ -11,22 +11,22 @@ const LineChart = () => {
   const INFLATION = pcpipch_data[ID];
 
   useEffect(() => {
-    if (!LUR || !GDP || !INFLATION) return;
+    if (!LUR && !GDP && !INFLATION) return <h1> No Data present !</h1>;
 
     // Filtered data for each dataset
     const filteredLUR = LUR.present.map((year) => ({
       year: +year,
-      value: parseFloat(LUR[year]),
+      value: LUR[year] !== null ? parseFloat(LUR[year]) : 0,
     }));
 
     const filteredGDP = GDP.present.map((year) => ({
       year: +year,
-      value: parseFloat(GDP[year]),
+      value: GDP[year] !== null ? parseFloat(GDP[year]) : 0,
     }));
 
     const filteredINFLATION = INFLATION.present.map((year) => ({
       year: +year,
-      value: parseFloat(INFLATION[year]),
+      value: INFLATION[year] !== null ? parseFloat(INFLATION[year]) : 0,
     }));
 
     // Chart dimensions and margins
@@ -107,13 +107,15 @@ const LineChart = () => {
     g.append("g")
       .attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(xScale));
+      // .transition();
+      // .duration(1000);
 
     g.append("g").call(d3.axisLeft(yScale));
 
     // Create legend
     const legend = svg
       .append("g")
-      .attr("transform", `translate(${width - 400},${margin.top})`);
+      .attr("transform", `translate(${width - 600},${margin.top})`);
 
     // Add legend items
     legend

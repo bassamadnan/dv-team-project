@@ -5,6 +5,7 @@ import CountryMap from "../graphs/CountryMap";
 import Map from "../graphs/Map";
 import { numeric_to_alpha3 } from "../utils/numericToAlpha";
 import BarChart from "../graphs/BarChart";
+import BarChartComparison from "../graphs/BarChartComapison";
 
 /*
   A 2x2 grid component , basically having 4 divs equally spaced
@@ -27,9 +28,10 @@ const CountryPage = () => {
         <BarChart />
       </div>
       <div>
-        <h1 className="text-3xl font-bold underline" style={{ color: "blue" }}>
+        {/* <h1 className="text-3xl font-bold underline" style={{ color: "blue" }}>
           Thank You !
-        </h1>
+        </h1> */}
+        <BarChartComparison />
       </div>
       <div>
         <LineChart />

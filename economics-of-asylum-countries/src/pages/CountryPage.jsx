@@ -21,17 +21,19 @@ const CountryPage = () => {
   return (
     <div className="grid grid-cols-2 grid-rows-2">
       <div>
-        <Map  countryCode={numeric_to_alpha3[ID]}/>
+        <Map countryCode={numeric_to_alpha3[ID]} />
       </div>
       <div>
         <BarChart />
       </div>
       <div>
-        <h1 className="text-3xl font-bold underline" style={{color:"blue"}}>
+        <h1 className="text-3xl font-bold underline" style={{ color: "blue" }}>
           Thank You !
         </h1>
       </div>
-      <div><LineChart /> </div>
+      <div>
+        <LineChart />
+      </div>
     </div>
   );
 };

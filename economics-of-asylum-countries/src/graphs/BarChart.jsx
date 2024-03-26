@@ -112,7 +112,7 @@ const BarChart = () => {
   }, [currData, ID]); // rerender everytime the data and country changes
 
   return (
-    <div style={{ background: "steelblue", color: "black", padding: "3px", border: "3px solid green", boxSizing: "border-box" }}>
+    <div>
       <BarChartSelector />
       <svg width={800} height={600} id="barchart" ref={ref}/>
     </div>

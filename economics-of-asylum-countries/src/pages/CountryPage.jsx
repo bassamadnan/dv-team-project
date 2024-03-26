@@ -23,7 +23,7 @@ const CountryPage = () => {
       <div>
         <Map countryCode={numeric_to_alpha3[ID]} />
       </div>
-      <div>
+      <div style={{ height:"650px", background: "steelblue", color: "black", padding: "3px", border: "3px solid green", boxSizing: "border-box" }}>
         <BarChart />
       </div>
       <div>

@@ -172,7 +172,7 @@ export default function Map({ countryCode }) {
         ref={dropdownRef}
         style={{ position: "absolute", top: "600px" }}
       >
-        <option value="None">None</option>
+        <option value="None">Select Data Type</option>
         <option value="Incoming refugees">Incoming refugees</option>
         <option value="Outgoing refugees">Outgoing refugees</option>
         <option value="Net difference">Net difference</option>

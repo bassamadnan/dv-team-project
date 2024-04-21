@@ -7,6 +7,7 @@ import { numeric_to_alpha3 } from "../utils/numericToAlpha";
 import BarChart from "../graphs/BarChart";
 import BarChartComparison from "../graphs/BarChartComapison";
 import Particle from "../graphs/Particle";
+import Slider from "../graphs/Slider";
 
 /*
   A 2x2 grid component , basically having 4 divs equally spaced
@@ -22,9 +23,10 @@ const SingleCountry = () => {
   // console.log(ID, numeric_to_alpha3[ID]);
   return (
     <div className="grid grid-cols-2 grid-rows-2">
-      <div>
+      <div style={{position:"relative"}}>
         {/* <Map countryCode={numeric_to_alpha3[ID]} /> */}
         <Particle />
+        <Slider/>
       </div>
       <div style={{ height:"650px", background: "steelblue", color: "black", padding: "3px", border: "3px solid green", boxSizing: "border-box" }}>
         <BarChart />

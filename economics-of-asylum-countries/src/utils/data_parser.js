@@ -7,7 +7,7 @@ import lur_data from "../datasets/LUR.json" with { type: "json" };
 import ggxwdn_data from "../datasets/GGXWDN_NGDP.json" with { type: "json" };
 import pcpipch_data from "../datasets/PCPIPCH.json" with { type: "json" };
 import population_data from "../datasets/population_dataset.json" with { type: "json" };
-import conversion_country from "../datasets/conversion_country.json" with {type: "json"};
+import conversion_country from "../datasets/country_numeric.json" with {type: "json"};
 
 export {
     outgoing_refugee_data, 

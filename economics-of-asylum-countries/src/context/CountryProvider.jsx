@@ -22,6 +22,8 @@ const CountryProvider = ({ children }) => {
         setCurrData,
         countryView,
         setCountryView,
+        year,
+        setYear
       }}
     >
       {children}

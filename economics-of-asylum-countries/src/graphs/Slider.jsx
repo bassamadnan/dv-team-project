@@ -6,6 +6,7 @@ import { countryState } from "../context/CountryProvider";
 function Slider() {
   const sliderRef = useRef();
   const { year, setYear } = countryState();
+  console.log(year);
   useEffect(() => {
     var currentYear = "2000";
     // setting up slider for geomap
@@ -32,10 +33,8 @@ function Slider() {
       .call(slider);
   }, []);
   return (
-    <div>
-      test1
+    <div style={{ position: 'absolute', top: 200, left: 30 }}>
       <svg className="w-1/10 h-[500px] text-black" ref={sliderRef}></svg>
-      test
     </div>
   );
 }

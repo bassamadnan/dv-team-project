@@ -5,7 +5,6 @@ import CountryMap from "../graphs/CountryMap";
 import Map from "../graphs/Map";
 import { numeric_to_alpha3 } from "../utils/numericToAlpha";
 import BarChart from "../graphs/BarChart";
-import BarChartComparison from "../graphs/BarChartComapison";
 import Particle from "../graphs/Particle";
 import Slider from "../graphs/Slider";
 // import ComparableBubbleChart from "../graphs/Bubble";

@@ -2,37 +2,45 @@ import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { countryState } from "../context/CountryProvider";
 import BarChartSelector from "./BarChartSelector";
+import { conversion_country } from "../utils/data_parser";
 
-/*
-  Bar chart component which is the second div of the Country Page
-  Responsible for rendering the bar chart information everytime the selector value is changed
-  Logic below is commented to show what part is responsible for displaying what (rectangles, axes , tooltip etc...)
-  
-  Starter code and refferences were taken from below
-  https://kamibrumi.medium.com/getting-started-with-react-d3-js-d86ccea05f08
-  https://www.react-graph-gallery.com/barplot
-
-*/
-
-const BarChart = () => {
+const DoubleBarChart = ({ countryTwoID }) => {
   const { currData, ID } = countryState();
 
-  if (!currData || !currData[ID]) return <h1> No Data present !</h1>;
+  if (!currData || !currData[ID] || !currData[countryTwoID])
+    return <h1> No Data present !</h1>;
 
   const ref = useRef();
   const curr_data = currData[ID];
   const data = [];
+  const curr_data_two = currData[countryTwoID];
+  const data_two = [];
 
   for (const year of curr_data.present) {
     const value = parseFloat(curr_data[year].replace(/,/g, ""));
     data.push({ Year: year, Value: value });
   }
 
+  for (const year of curr_data_two.present) {
+    const value = parseFloat(curr_data_two[year].replace(/,/g, ""));
+    data_two.push({ Year: year, Value: value });
+  }
+
+  const year_union = [...curr_data.present, ...curr_data_two.present];
+
+  console.log(data, data_two);
+
   useEffect(() => {
+    const chartWidth = parseFloat(d3.select(ref.current).style("width"));
+    const chartHeight = parseFloat(d3.select(ref.current).style("height"));
+    Math.max(
+      d3.max(data, (d) => d.Value),
+      d3.max(data_two, (d) => d.Value)
+    );
     // set the dimensions and margins of the graph
-    const margin = { top: 30, right: 30, bottom: 70, left: 60 },
-      width = 800 - margin.left - margin.right,
-      height = 600 - margin.top - margin.bottom;
+    const margin = { top: 10, right: 10, bottom: 60, left: 60 },
+      width = chartWidth - margin.left - margin.right,
+      height = chartHeight - margin.top - margin.bottom;
 
     // remove previous SVG if exists
     d3.select(ref.current).selectAll("*").remove(); // if not done then the re-renders overlap !
@@ -47,11 +55,7 @@ const BarChart = () => {
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // X axis
-    const x = d3
-      .scaleBand()
-      .range([0, width])
-      .domain(data.map((d) => d.Year))
-      .padding(0.2);
+    const x = d3.scaleBand().range([0, width]).domain(year_union).padding(0.2);
     svg
       .append("g")
       .attr("transform", `translate(0, ${height})`)
@@ -63,7 +67,13 @@ const BarChart = () => {
     // Add Y axis
     const y = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.Value)])
+      .domain([
+        0,
+        Math.max(
+          d3.max(data, (d) => d.Value),
+          d3.max(data_two, (d) => d.Value)
+        ),
+      ])
       .range([height, 0]);
     svg.append("g").call(d3.axisLeft(y));
 
@@ -74,12 +84,26 @@ const BarChart = () => {
       .join("rect")
       .attr("x", (d) => x(d.Year))
       .attr("y", height)
-      .attr("width", x.bandwidth())
+      .attr("width", x.bandwidth() * 0.4)
       .attr("height", 0)
       .attr("class", "mybar");
+    const bars_two = svg
+      .selectAll("mybartwo")
+      .data(data_two)
+      .join("rect")
+      .attr("x", (d) => x(d.Year) + x.bandwidth() / 2)
+      .attr("y", height)
+      .attr("width", x.bandwidth() * 0.4)
+      .attr("height", 0)
+      .attr("class", "mybar2");
 
     // Animation
     bars
+      .transition()
+      .duration(800)
+      .attr("y", (d) => y(d.Value))
+      .attr("height", (d) => height - y(d.Value));
+    bars_two
       .transition()
       .duration(800)
       .attr("y", (d) => y(d.Value))
@@ -100,7 +124,9 @@ const BarChart = () => {
       .on("mouseover", function (event, d) {
         tooltip
           .style("visibility", "visible")
-          .html(`Year: ${d.Year}<br>Value: ${d.Value}`);
+          .html(
+            `Country: ${conversion_country[ID]}<br>Year: ${d.Year}<br>Value: ${d.Value}`
+          );
       })
       .on("mousemove", function (event) {
         tooltip
@@ -110,14 +136,30 @@ const BarChart = () => {
       .on("mouseout", function () {
         tooltip.style("visibility", "hidden");
       });
-  }, [currData, ID]); // rerender everytime the data and country changes
+    bars_two
+      .on("mouseover", function (event, d) {
+        tooltip
+          .style("visibility", "visible")
+          .html(
+            `Country: ${conversion_country[countryTwoID]}<br>Year: ${d.Year}<br>Value: ${d.Value}`
+          );
+      })
+      .on("mousemove", function (event) {
+        tooltip
+          .style("top", event.pageY - 10 + "px")
+          .style("left", event.pageX + 10 + "px");
+      })
+      .on("mouseout", function () {
+        tooltip.style("visibility", "hidden");
+      });
+  }, [currData, ID, data, data_two]); // rerender everytime the data and country changes
 
   return (
     <div>
       <BarChartSelector />
-      <svg width={800} height={600} id="barchart" ref={ref} />
+      <svg width={"50vw"} height={"80vh"} id="barchart" ref={ref} />
     </div>
   );
 };
 
-export default BarChart;
+export default DoubleBarChart;

@@ -89,12 +89,21 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-#barchart rect {
+.mybar {
   fill: gold; /* color of bars on barchart */
 }
 
-#barchart rect:hover {
+.mybar:hover {
   fill: darkblue; /* change the fill color on hover */
+  transition: fill 0.3s;
+}
+
+.mybar2 {
+  fill: darkgoldenrod; /* color of bars on barchart */
+}
+
+.mybar2:hover {
+  fill: indigo; /* change the fill color on hover */
   transition: fill 0.3s;
 }
 

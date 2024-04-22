@@ -34,7 +34,7 @@ function Slider() {
   }, []);
   return (
     <div style={{ position: 'absolute', top: 200, left: 30 }}>
-      <svg className="w-1/10 h-[500px] text-black" ref={sliderRef}></svg>
+      <svg className="w-1/10 h-[40vw] text-black" ref={sliderRef}></svg>
     </div>
   );
 }

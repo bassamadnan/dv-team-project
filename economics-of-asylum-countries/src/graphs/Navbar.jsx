@@ -7,7 +7,7 @@ const Navbar = () => {
     setCountryView(view);
   };
   return (
-    <div className="flex justify-center bg-black text-lg">
+    <div className="flex justify-center bg-black text-lg h-[10vh]">
       <button
         className={`${
           countryView === "option1"

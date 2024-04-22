@@ -29,10 +29,13 @@ const LineChart = () => {
       value: INFLATION[year] !== null ? parseFloat(INFLATION[year]) : 0,
     }));
 
+    const chartWidth = parseFloat(d3.select(ref.current).style("width"));
+    const chartHeight = parseFloat(d3.select(ref.current).style("height"));
+
     // Chart dimensions and margins
     const margin = { top: 30, right: 30, bottom: 70, left: 60 };
-    const width = 800 - margin.left - margin.right;
-    const height = 600 - margin.top - margin.bottom;
+    const width = chartWidth - margin.left - margin.right;
+    const height = chartHeight - margin.top - margin.bottom;
 
     // Combine all data points into one array
     const allData = [...filteredLUR, ...filteredGDP, ...filteredINFLATION];
@@ -107,8 +110,8 @@ const LineChart = () => {
     g.append("g")
       .attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(xScale));
-      // .transition();
-      // .duration(1000);
+    // .transition();
+    // .duration(1000);
 
     g.append("g").call(d3.axisLeft(yScale));
 
@@ -135,7 +138,7 @@ const LineChart = () => {
 
     legend
       .append("rect")
-      .attr("x", width - 200-30)
+      .attr("x", width - 200 - 30)
       .attr("y", 30)
       .attr("width", 20)
       .attr("height", 20)
@@ -165,8 +168,8 @@ const LineChart = () => {
   }, [ID, LUR, GDP, INFLATION]);
 
   return (
-    <div className=" bg-yellow-300 border-red-700 border-solid border-4">
-      <svg ref={ref} />
+    <div>
+      <svg height={"45vh"} width={"50vw"} ref={ref} />
     </div>
   );
 };

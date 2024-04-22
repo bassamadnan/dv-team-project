@@ -29,10 +29,13 @@ const BarChart = () => {
   }
 
   useEffect(() => {
+    const chartWidth = parseFloat(d3.select(ref.current).style("width"));
+    const chartHeight = parseFloat(d3.select(ref.current).style("height"));
+
     // set the dimensions and margins of the graph
     const margin = { top: 30, right: 30, bottom: 70, left: 60 },
-      width = 800 - margin.left - margin.right,
-      height = 600 - margin.top - margin.bottom;
+      width = chartWidth - margin.left - margin.right,
+      height = chartHeight - margin.top - margin.bottom;
 
     // remove previous SVG if exists
     d3.select(ref.current).selectAll("*").remove(); // if not done then the re-renders overlap !
@@ -115,7 +118,7 @@ const BarChart = () => {
   return (
     <div>
       <BarChartSelector />
-      <svg width={800} height={600} id="barchart" ref={ref} />
+      <svg width={"50vw"} height={"45vh"} id="barchart" ref={ref} />
     </div>
   );
 };

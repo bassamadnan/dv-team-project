@@ -25,21 +25,11 @@ const SingleCountry = () => {
   return (
     <div>
       <div className="grid grid-cols-2 grid-rows-2">
-        <div style={{ position: "relative" }}>
-          {/* <Map countryCode={numeric_to_alpha3[ID]} /> */}
+        <div>
           <Particle />
           <Slider />
         </div>
-        <div
-          style={{
-            height: "650px",
-            background: "steelblue",
-            color: "black",
-            padding: "3px",
-            border: "3px solid green",
-            boxSizing: "border-box",
-          }}
-        >
+        <div>
           <BarChart />
         </div>
         <div>

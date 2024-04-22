@@ -1,16 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { countryState } from "../context/CountryProvider";
-import { lur_data, ggxwdn_data, pcpipch_data } from "../utils/data_parser";
 import LineChartSelector from "./LineChartSelector";
 
 const DoubleLineChart = ({ countryTwoID }) => {
+  // country selected from geomap page
   const { currLineData, ID } = countryState();
 
+  // check if all required data available
   if (!currLineData || !currLineData[ID] || !currLineData[countryTwoID])
     return <h1> No Data present !</h1>;
 
+  // reference for the svg
   const ref = useRef();
+
+  // filtering the required data
   const curr_data = currLineData[ID];
   const data = [];
   const curr_data_two = currLineData[countryTwoID];
@@ -29,6 +33,7 @@ const DoubleLineChart = ({ countryTwoID }) => {
   const year_union = [...curr_data.present, ...curr_data_two.present];
 
   useEffect(() => {
+    // picking chart dimensions
     const chartWidth = parseFloat(d3.select(ref.current).style("width"));
     const chartHeight = parseFloat(d3.select(ref.current).style("height"));
 
@@ -74,29 +79,40 @@ const DoubleLineChart = ({ countryTwoID }) => {
 
     const g = svg.append("g");
 
-    // Line generators for each dataset
+    // Line generator
     const line = d3
       .line()
       .x((d) => x(d.Year))
       .y((d) => y(d.Value));
 
-    console.log(data, data_two);
-
-    // Render lines
-    g.append("path")
+    // Render lines + animate them
+    var path = g
+      .append("path")
       .datum(data)
       .attr("fill", "none")
       .attr("stroke", "gold")
       .attr("stroke-width", 3)
       .attr("d", line);
-
-    g.append("path")
+    var pathlength = path.node().getTotalLength();
+    path
+      .attr("stroke-dashoffset", pathlength)
+      .attr("stroke-dasharray", pathlength)
+      .transition(d3.transition().ease(d3.easeSin).duration(2500))
+      .attr("stroke-dashoffset", 0);
+    var path_two = g
+      .append("path")
       .datum(data_two)
       .attr("fill", "none")
       .attr("stroke", "darkgoldenrod")
       .attr("stroke-width", 3)
       .attr("d", line);
-  }, [currLineData, ID, data, data_two]);
+    var pathlength_two = path_two.node().getTotalLength();
+    path_two
+      .attr("stroke-dashoffset", pathlength_two)
+      .attr("stroke-dasharray", pathlength_two)
+      .transition(d3.transition().ease(d3.easeSin).duration(2500))
+      .attr("stroke-dashoffset", 0);
+  }, [currLineData, ID, data, data_two]); // rerender everytime the data and country changes
 
   return (
     <div>

@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import * as d3 from "d3";
 import L from "leaflet";
 import { countryState } from "../context/CountryProvider";
-import { sliderBottom, sliderRight } from "d3-simple-slider";
+import { sliderBottom } from "d3-simple-slider";
 import { getFillColor } from "../utils/fillColor";
 import { getStatistic } from "../utils/getStatistic";
 

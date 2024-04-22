@@ -5,12 +5,17 @@ import BarChartSelector from "./BarChartSelector";
 import { conversion_country } from "../utils/data_parser";
 
 const DoubleBarChart = ({ countryTwoID }) => {
+  // country selected from geomap page
   const { currBarData, ID } = countryState();
 
+  // check if all required data available
   if (!currBarData || !currBarData[ID] || !currBarData[countryTwoID])
     return <h1> No Data present !</h1>;
 
+  // reference for the svg
   const ref = useRef();
+
+  // filtering the required data
   const curr_data = currBarData[ID];
   const data = [];
   const curr_data_two = currBarData[countryTwoID];
@@ -29,12 +34,14 @@ const DoubleBarChart = ({ countryTwoID }) => {
   const year_union = [...curr_data.present, ...curr_data_two.present];
 
   useEffect(() => {
+    // picking chart dimensions
     const chartWidth = parseFloat(d3.select(ref.current).style("width"));
     const chartHeight = parseFloat(d3.select(ref.current).style("height"));
     Math.max(
       d3.max(data, (d) => d.Value),
       d3.max(data_two, (d) => d.Value)
     );
+
     // set the dimensions and margins of the graph
     const margin = { top: 10, right: 10, bottom: 60, left: 60 },
       width = chartWidth - margin.left - margin.right,

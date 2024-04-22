@@ -84,27 +84,48 @@ const LineChart = () => {
       .x((d) => xScale(d.year))
       .y((d) => yScale(d.value));
 
-    // Render lines
-    g.append("path")
+    // Render lines + animating them
+    var pathLUR = g
+      .append("path")
       .datum(filteredLUR)
       .attr("fill", "none")
       .attr("stroke", "steelblue")
       .attr("stroke-width", 3)
       .attr("d", lineLUR);
+    var lengthLUR = pathLUR.node().getTotalLength();
+    pathLUR
+      .attr("stroke-dashoffset", lengthLUR)
+      .attr("stroke-dasharray", lengthLUR)
+      .transition(d3.transition().ease(d3.easeSin).duration(2500))
+      .attr("stroke-dashoffset", 0);
 
-    g.append("path")
+    var pathGDP = g
+      .append("path")
       .datum(filteredGDP)
       .attr("fill", "none")
       .attr("stroke", "green")
       .attr("stroke-width", 3)
       .attr("d", lineGDP);
+    var lengthGDP = pathGDP.node().getTotalLength();
+    pathGDP
+      .attr("stroke-dashoffset", lengthGDP)
+      .attr("stroke-dasharray", lengthGDP)
+      .transition(d3.transition().ease(d3.easeSin).duration(2500))
+      .attr("stroke-dashoffset", 0);
 
-    g.append("path")
+    var pathINFLATION = g
+      .append("path")
       .datum(filteredINFLATION)
       .attr("fill", "none")
       .attr("stroke", "red")
       .attr("stroke-width", 3)
       .attr("d", lineINFLATION);
+    var lengthINFLATION = pathINFLATION.node().getTotalLength();
+    pathINFLATION
+      .attr("stroke-dashoffset", lengthINFLATION)
+      .attr("stroke-dasharray", lengthINFLATION)
+      .transition(d3.transition().ease(d3.easeSin).duration(2500))
+      .attr("stroke-dashoffset", 0);
 
     // Append x and y axes
     g.append("g")

@@ -3,11 +3,7 @@ import { useEffect, useRef } from "react";
 import { feature } from "topojson-client";
 import { countryState } from "../context/CountryProvider.jsx";
 import { useNavigate } from "react-router-dom";
-import {
-  incoming_refugee_data,
-  outgoing_refugee_data,
-} from "../utils/data_parser.js";
-import { sliderRight, sliderBottom } from "d3-simple-slider";
+import { sliderRight } from "d3-simple-slider";
 import { getFillColor } from "../utils/fillColor.js";
 import { getTooltipContent } from "../utils/tooltipString.js";
 

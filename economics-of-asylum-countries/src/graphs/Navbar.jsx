@@ -1,6 +1,8 @@
 import React from "react";
 import { countryState } from "../context/CountryProvider";
 
+// Navbar on the country page to switch between single country view and compare country view
+
 const Navbar = () => {
   const { countryView, setCountryView } = countryState();
   const handleCountryViewChange = (view) => {

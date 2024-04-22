@@ -1,15 +1,11 @@
 import React from "react";
 import { countryState } from "../context/CountryProvider";
 import LineChart from "../graphs/LineChart";
-import CountryMap from "../graphs/CountryMap";
-import Map from "../graphs/Map";
-import { numeric_to_alpha3 } from "../utils/numericToAlpha";
 import BarChart from "../graphs/BarChart";
 import Particle from "../graphs/Particle";
 import Slider from "../graphs/Slider";
-// import ComparableBubbleChart from "../graphs/Bubble";
 import GroupVisualization from "../graphs/Bubble";
-// import renderBubbleChart from "../graphs/Bubble";
+
 /*
   A 2x2 grid component , basically having 4 divs equally spaced
   The divs are as follows

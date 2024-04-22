@@ -1,11 +1,5 @@
 import React, { useState } from "react";
 import { countryState } from "../context/CountryProvider";
-import LineChart from "../graphs/LineChart";
-import CountryMap from "../graphs/CountryMap";
-import Map from "../graphs/Map";
-import { numeric_to_alpha3 } from "../utils/numericToAlpha";
-import BarChart from "../graphs/BarChart";
-import Particle from "../graphs/Particle";
 import { country_numeric } from "../utils/data_parser";
 import DoubleBarChart from "../graphs/DoubleBarChart";
 import DoubleLineChart from "../graphs/DoubleLineChart";

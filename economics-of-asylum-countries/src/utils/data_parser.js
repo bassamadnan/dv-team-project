@@ -20,6 +20,8 @@ export {
     ggxwdn_data, 
     pcpipch_data, 
     population_data, 
-    country_numeric,
-    conversion_country,
+    // country name to country id mapping 
+    country_numeric, 
+    // country id to country name mapping
+    conversion_country, 
 };

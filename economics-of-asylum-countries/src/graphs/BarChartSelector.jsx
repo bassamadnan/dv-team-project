@@ -7,11 +7,11 @@ import { countryState } from '../context/CountryProvider';
 /*
     This component is responsible for showning the type of data to be displayed on barchart
     
-    The bar chart uses the value of currData as a dependancy for re-rendering
+    The bar chart uses the value of currBarData as a dependancy for re-rendering
     this component is what actually changes the dependancys
 */
 const BarChartSelector = () => {
-    const {setCurrData} = countryState();
+    const {setCurrBarData} = countryState();
     const dataOptions = [
       { label: 'GDP Data', value: gdp_data },
       { label: 'Purchasing Power Parity per Capita Data', value: ppppc_data },
@@ -27,7 +27,7 @@ const BarChartSelector = () => {
       const selectedValue = event.target.value;
       const selectedOption = dataOptions.find(option => option.label === selectedValue);
       setSelectedData(selectedOption.value);
-      setCurrData(selectedOption.value);
+      setCurrBarData(selectedOption.value);
     //   console.log(selectedOption);
     };
   // this logic is for checking if the any of the options have been selected/changed on the selector
@@ -35,7 +35,7 @@ const BarChartSelector = () => {
       <div>
         <select onChange={handleChange}> 
           {dataOptions.map(option => (
-            
+        
             <option key={option.label} value={option.label}>{option.label}</option>
           ))}
         </select>

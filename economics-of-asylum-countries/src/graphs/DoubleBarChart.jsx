@@ -5,15 +5,15 @@ import BarChartSelector from "./BarChartSelector";
 import { conversion_country } from "../utils/data_parser";
 
 const DoubleBarChart = ({ countryTwoID }) => {
-  const { currData, ID } = countryState();
+  const { currBarData, ID } = countryState();
 
-  if (!currData || !currData[ID] || !currData[countryTwoID])
+  if (!currBarData || !currBarData[ID] || !currBarData[countryTwoID])
     return <h1> No Data present !</h1>;
 
   const ref = useRef();
-  const curr_data = currData[ID];
+  const curr_data = currBarData[ID];
   const data = [];
-  const curr_data_two = currData[countryTwoID];
+  const curr_data_two = currBarData[countryTwoID];
   const data_two = [];
 
   for (const year of curr_data.present) {
@@ -27,8 +27,6 @@ const DoubleBarChart = ({ countryTwoID }) => {
   }
 
   const year_union = [...curr_data.present, ...curr_data_two.present];
-
-  console.log(data, data_two);
 
   useEffect(() => {
     const chartWidth = parseFloat(d3.select(ref.current).style("width"));
@@ -152,7 +150,7 @@ const DoubleBarChart = ({ countryTwoID }) => {
       .on("mouseout", function () {
         tooltip.style("visibility", "hidden");
       });
-  }, [currData, ID, data, data_two]); // rerender everytime the data and country changes
+  }, [currBarData, ID, data, data_two]); // rerender everytime the data and country changes
 
   return (
     <div>

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { gdp_data } from "../utils/data_parser";
+import { gdp_data, lur_data } from "../utils/data_parser";
 
 // keeps track of the country selected
 
@@ -9,7 +9,8 @@ const CountryProvider = ({ children }) => {
   const [country, setCountry] = useState(null);
   const [ID, setCountryID] = useState(null);
   const [year, setYear] = useState("2000");
-  const [currData, setCurrData] = useState(gdp_data);
+  const [currBarData, setCurrBarData] = useState(gdp_data);
+  const [currLineData, setCurrLineData] = useState(lur_data);
   const [countryView, setCountryView] = useState("SingleCountry");
   return (
     <CountryContext.Provider
@@ -18,8 +19,10 @@ const CountryProvider = ({ children }) => {
         setCountry,
         ID,
         setCountryID,
-        currData,
-        setCurrData,
+        currBarData,
+        setCurrBarData,
+        currLineData,
+        setCurrLineData,
         countryView,
         setCountryView,
         year,

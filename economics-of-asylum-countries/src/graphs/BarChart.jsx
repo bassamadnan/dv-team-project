@@ -15,12 +15,12 @@ import BarChartSelector from "./BarChartSelector";
 */
 
 const BarChart = () => {
-  const { currData, ID } = countryState();
+  const { currBarData, ID } = countryState();
 
-  if (!currData || !currData[ID]) return <h1> No Data present !</h1>;
+  if (!currBarData || !currBarData[ID]) return <h1> No Data present !</h1>;
 
   const ref = useRef();
-  const curr_data = currData[ID];
+  const curr_data = currBarData[ID];
   const data = [];
 
   for (const year of curr_data.present) {
@@ -110,7 +110,7 @@ const BarChart = () => {
       .on("mouseout", function () {
         tooltip.style("visibility", "hidden");
       });
-  }, [currData, ID]); // rerender everytime the data and country changes
+  }, [currBarData, ID]); // rerender everytime the data and country changes
 
   return (
     <div>

@@ -8,6 +8,7 @@ import BarChart from "../graphs/BarChart";
 import Particle from "../graphs/Particle";
 import { country_numeric } from "../utils/data_parser";
 import DoubleBarChart from "../graphs/DoubleBarChart";
+import DoubleLineChart from "../graphs/DoubleLineChart";
 
 const CompareCountry = () => {
   const { ID, country } = countryState();
@@ -32,7 +33,7 @@ const CompareCountry = () => {
       </select>
       <div className="grid grid-cols-2">
         <DoubleBarChart countryTwoID={countryTwo}></DoubleBarChart>
-        <DoubleBarChart countryTwoID={countryTwo}></DoubleBarChart>
+        <DoubleLineChart countryTwoID={countryTwo}></DoubleLineChart>
       </div>
     </div>
   );

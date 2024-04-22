@@ -2,7 +2,6 @@ import * as React from "react";
 import { ReactP5Wrapper } from "@p5-wrapper/react";
 import { incoming_refugee_data, outgoing_refugee_data, population_data } from "../utils/data_parser";
 import { countryState } from "../context/CountryProvider";
-import { useEffect } from "react";
 
 function sketch(p, year, ID){
 
@@ -56,6 +55,14 @@ function sketch(p, year, ID){
                 if (this.y < 0 || this.y > p.height) {
                     this.ySpeed *= -1;
                 }
+                if(this.x  == 200 || this.x == 720 || this.y == 100 || this.y == 550){
+                    if (this.x == 200 || this.x == 720) {
+                        this.xSpeed *= -1;
+                    }
+                    if (this.y == 100 || this.y == 550) {
+                        this.ySpeed *= -1;
+                    }
+                }
             }
             this.x += this.xSpeed;
             this.y += this.ySpeed;
@@ -91,13 +98,13 @@ function sketch(p, year, ID){
     };
 
     p.draw = () => {
-        p.background('grey');
+        p.background('black');
         p.stroke(0); // Set stroke color to black
         p.noFill(); // No fill color for the outer box border
         p.rect(0, 0, p.width, p.height); // Draw the outer box border
         // Draw inner box
         p.stroke(0);
-        p.fill("yellow"); 
+        p.fill("grey"); 
         p.rect(200, 100, 520, 450); // Bigger rectangle
 
         // Handle particles inside the inner box

@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import { lur_data, ggxwdn_data, pcpipch_data } from "../utils/data_parser";
 import { countryState } from "../context/CountryProvider";
 import { conversion_country } from "../utils/data_parser";
+import * as d3Legend from "d3-color-legend";
 
 const GroupVisualization = () => {
   const { ID } = countryState();
@@ -28,12 +29,12 @@ const GroupVisualization = () => {
   ];
   const datasets = ["lur_data", "ggxwdn_data", "pcpipch_data"]; // Options for data representation
   const svgRef = useRef();
-  const legendRef = useRef();
+  // const legendRef = useRef();
 
   useEffect(() => {
     // Initial draw when component mounts
     drawBubbleChart(selectedYear, selectedData);
-    drawLegend();
+    // drawLegend();
   }, [selectedYear, selectedData]);
 
   const drawBubbleChart = (year, dataKey) => {
@@ -117,9 +118,10 @@ const GroupVisualization = () => {
         tooltip
           .style("opacity", 1)
           .html(`${conversion_country[d.country]}: ${d.value}`)
-          .style("left", `${event.clientX}px`)
-          .style("top", `${event.clientY}px`)
-          .style("font-size", "36px"); // Adjust the font size as needed
+          .style("position", "absolute")
+          .style("left", `${event.pageX}px`)
+          .style("top", `${event.pageY}px`)
+          .style("font-size", "20px"); // Adjust the font size as needed
       }
 
       function handleMouseOut() {
@@ -185,16 +187,12 @@ const GroupVisualization = () => {
     setSelectedData(dataKey);
   };
 
-  const drawLegend = () => {
-    // Your drawLegend function remains the same...
-  };
-
   return (
     <div className="dropdown">
-      <div style={{ display: "flex" }}>
+      <div className="flex-col text-center">
         <div style={{ width: "300px" }} />
         <label htmlFor="bubbleChartSelectYear">Select A Year: </label>
-        <div style={{ textAlign: "center" }} className="select">
+        <div className="select text-center">
           <select
             id="bubbleChartSelectYear"
             onChange={changeStackCountry}
@@ -208,7 +206,7 @@ const GroupVisualization = () => {
           </select>
         </div>
         <label htmlFor="dataRepresentation">Select Data Representation: </label>
-        <div style={{ textAlign: "center" }} className="select">
+        <div className="select text-center">
           <select
             id="dataRepresentation"
             onChange={changeDataRepresentation}
@@ -224,7 +222,7 @@ const GroupVisualization = () => {
       </div>
       <div id="tooltip"></div>
       <svg width="1800" height="1000" ref={svgRef} />
-      <svg width="500" height="500" ref={legendRef} />
+      {/* <svg width="300" height="50" ref={legendRef} /> */}
     </div>
   );
 };

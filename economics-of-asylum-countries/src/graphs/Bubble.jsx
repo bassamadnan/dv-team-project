@@ -28,6 +28,11 @@ const GroupVisualization = () => {
     "2023",
   ];
   const datasets = ["lur_data", "ggxwdn_data", "pcpipch_data"]; // Options for data representation
+  const option_mapping = {
+    "lur_data": "Unemployment Rates",
+    "ggxwdn_data": "Debt as % of GDP",
+    "pcpipch_data": "Inflation as % of GDP"
+  }
   const svgRef = useRef();
   // const legendRef = useRef();
 
@@ -187,8 +192,8 @@ const GroupVisualization = () => {
   };
 
   return (
-    <div className="dropdown">
-      <div className="flex-col text-center">
+    <div className="dropdown" style={{position:"relative"}}>
+      <div className="flex-col text-center"  style={{zIndex:"3"}}>
         <div style={{ width: "300px" }} />
         <label htmlFor="bubbleChartSelectYear">Select A Year: </label>
         <div className="select text-center">
@@ -218,14 +223,14 @@ const GroupVisualization = () => {
                 value={dataset}
                 className="bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline text-lg" // Increased text size using text-lg class
               >
-                {dataset}
+                {option_mapping[dataset]}
               </option>
             ))}
           </select>
         </div>
       </div>
       <div id="tooltip"></div>
-      <svg width="1800" height="1800" ref={svgRef} />
+      <svg width="1800" height="1800" ref={svgRef}  style={{position:"relative", left:"20vw", top:"-20vh", zIndex:"-1"}}/>
       {/* <svg width="300" height="50" ref={legendRef} /> */}
     </div>
   );

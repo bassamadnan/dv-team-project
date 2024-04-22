@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import { lur_data, ggxwdn_data, pcpipch_data } from "../utils/data_parser";
 import { countryState } from "../context/CountryProvider";
 import { conversion_country } from "../utils/data_parser";
-import * as d3Legend from "d3-color-legend";
+// import * as d3Legend from "d3-color-legend";
 
 const GroupVisualization = () => {
   const { ID } = countryState();
@@ -50,18 +50,18 @@ const GroupVisualization = () => {
     // Define the scales for mapping data to visual properties
     const radiusScale = d3
       .scaleSqrt()
-      .domain([0, d3.max(data, (d) => d.value)])
+      .domain([d3.min(data, (d) => d.value), d3.max(data, (d) => d.value)])
       .range([2, 20]);
 
-    // Define color scale based on data values
+    // Define a diverging color scale
     const colorScale = d3
-      .scaleSequential(d3.interpolateBlues)
+      .scaleSequential(d3.interpolateRdYlBu) // Using a diverging color scale
       .domain([0, d3.max(data, (d) => d.value)]);
 
     const simulation = d3
       .forceSimulation(data)
-      .force("charge", d3.forceManyBody().strength(+10))
-      .force("center", d3.forceCenter(700, 500))
+      .force("charge", d3.forceManyBody().strength(+11))
+      .force("center", d3.forceCenter(700, 700))
       .force(
         "collide",
         d3.forceCollide().radius((d) => radiusScale(d.value) + 18) // Adjust the collision detection radius
@@ -77,27 +77,26 @@ const GroupVisualization = () => {
         .join("circle")
         .attr("r", (d) => {
           // Set the radius based on the value, but if the value is small, null, or zero, set a minimum radius
-          if (d.value < 1) {
-            return 20;
+          if (d.value < 2) {
+            return 5;
           }
-          return radiusScale(d.value * 1.8);
+          return radiusScale(d.value * 1.5);
         })
         .attr("fill", (d) => {
           // Set fill color based on value
           if (d.country === ID) {
             return "yellow"; // Yellow fill for highlighted country
-          } else if (d.value < 1) {
-            return "none"; // Empty circle
+          } else {
+            return colorScale(d.value);
           }
-          return colorScale(d.value);
         })
         .attr("stroke", (d) => {
           // Set stroke color based on value
-          if (d.country === ID) {
-            return "none"; // No stroke for highlighted country
-          } else if (d.value < 1) {
-            return "red"; // Red stroke for empty circles
-          }
+          // if (d.country === ID) {
+          //   return "none"; // No stroke for highlighted country
+          // } else if (d.value < 1) {
+          //   return "red"; // Red stroke for empty circles
+          // }
           return "none"; // No stroke for filled circles
         })
         .attr("stroke-width", 2) // Set stroke width for non-highlighted circles
@@ -128,16 +127,16 @@ const GroupVisualization = () => {
         d3.select("#tooltip").style("opacity", 0);
       }
 
-      const labels = g
-        .selectAll("text")
-        .data(data)
-        .join("text")
-        .text((d) => (d.country === ID ? conversion_country[d.country] : null))
-        .attr("text-anchor", "middle")
-        .style("fill", (d) => "black")
-        .attr("dy", ".35em")
-        .attr("x", (d) => d.x)
-        .attr("y", (d) => d.y);
+      // const labels = g
+      //   .selectAll("text")
+      //   .data(data)
+      //   .join("text")
+      //   .text((d) => (d.country === ID ? conversion_country[d.country] : null))
+      //   .attr("text-anchor", "middle")
+      //   .style("fill", (d) => "black")
+      //   .attr("dy", ".35em")
+      //   .attr("x", (d) => d.x)
+      //   .attr("y", (d) => d.y);
     }
 
     function dragstarted(event, d) {
@@ -150,11 +149,11 @@ const GroupVisualization = () => {
       // Calculate the new position within the SVG boundaries
       const newX = Math.max(
         radiusScale(d.value),
-        Math.min(2000 - radiusScale(d.value), event.x)
+        Math.min(1800 - radiusScale(d.value), event.x)
       );
       const newY = Math.max(
         radiusScale(d.value),
-        Math.min(1000 - radiusScale(d.value), event.y)
+        Math.min(1800 - radiusScale(d.value), event.y)
       );
 
       // Update the position of the circle and its label
@@ -206,14 +205,19 @@ const GroupVisualization = () => {
           </select>
         </div>
         <label htmlFor="dataRepresentation">Select Data Representation: </label>
-        <div className="select text-center">
+        <div className=" flex  items-center justify-center select text-center">
           <select
             id="dataRepresentation"
             onChange={changeDataRepresentation}
             value={selectedData}
+            className="block appearance-none  bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline text-lg" // Increased text size using text-lg class
           >
             {datasets.map((dataset) => (
-              <option key={dataset} value={dataset}>
+              <option
+                key={dataset}
+                value={dataset}
+                className="bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline text-lg" // Increased text size using text-lg class
+              >
                 {dataset}
               </option>
             ))}
@@ -221,7 +225,7 @@ const GroupVisualization = () => {
         </div>
       </div>
       <div id="tooltip"></div>
-      <svg width="1800" height="1000" ref={svgRef} />
+      <svg width="1800" height="1800" ref={svgRef} />
       {/* <svg width="300" height="50" ref={legendRef} /> */}
     </div>
   );

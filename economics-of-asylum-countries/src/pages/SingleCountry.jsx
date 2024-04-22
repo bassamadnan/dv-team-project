@@ -21,14 +21,14 @@ const SingleCountry = () => {
   return (
     <div>
       <div className="grid grid-cols-2 grid-rows-2 justify-items-center">
-        <div className="col-span-2">
+        <div className="col-span-2 my-5">
           <Particle />
           <Slider />
         </div>
-        <div className="mt-12">
+        <div className="">
           <BarChart />
         </div>
-        <div className="mt-12">
+        <div className="">
           <LineChart />
         </div>
       </div>

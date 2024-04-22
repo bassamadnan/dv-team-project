@@ -146,7 +146,7 @@ const LineChart = () => {
       .attr("x", width - 200)
       .attr("y", 40)
       .attr("dy", "0.35em")
-      .text("Debt as percentage of gdp");
+      .text("Debt as % of GDP");
 
     legend
       .append("rect")
@@ -161,7 +161,7 @@ const LineChart = () => {
       .attr("x", width - 200)
       .attr("y", 70)
       .attr("dy", "0.35em")
-      .text("Inflation rate");
+      .text("Inflation rate as % GDP");
   }, [ID, LUR, GDP, INFLATION]);
 
   return (

@@ -2,6 +2,7 @@ import * as React from "react";
 import { ReactP5Wrapper } from "@p5-wrapper/react";
 import { incoming_refugee_data, outgoing_refugee_data, population_data } from "../utils/data_parser";
 import { countryState } from "../context/CountryProvider";
+import { useEffect } from "react";
 
 function sketch(p, year, ID){
 
@@ -72,12 +73,13 @@ function sketch(p, year, ID){
         var totalPopulation = population_data[ID][shownYear];
         var scaledTotalPopulation = Math.floor(population_data[ID][shownYear] * populationFactor);
         console.log("tot pop", scaledTotalPopulation);
-        var scaledIncomingRefugees = Math.floor(incoming_refugee_data[year][ID]);
-        var scaledOutgoingRefugees = Math.floor(outgoing_refugee_data[year][ID].Count);
-        var scaledTotalRefugees = scaledIncomingRefugees + scaledOutgoingRefugees;
-        var normalizedRefugees = scaledTotalRefugees / totalPopulation;
+        var incomingRefugees = Math.floor(incoming_refugee_data[year][ID]);
+        var outgoingRefugees = Math.floor(outgoing_refugee_data[year][ID].Count);
+        var totalRefugees = incomingRefugees + outgoingRefugees;
+        var normalizedRefugees = totalRefugees / totalPopulation;
         var scaledRefugeeParticles = Math.floor(normalizedRefugees * refugeeMultiplier);
-        var incomingRefugeeParticles = Math.floor(scaledIncomingRefugees / scaledTotalRefugees * scaledRefugeeParticles * incomingRefugeePercentage);
+        // var incomingRefugeeParticles = Math.floor(incomingRefugees / totalRefugees * scaledRefugeeParticles * incomingRefugeePercentage);
+        var incomingRefugeeParticles = Math.floor(incomingRefugees/totalRefugees * 100);
         console.log(scaledTotalPopulation, incomingRefugeeParticles, scaledRefugeeParticles);
         
         innerBoxParticles = Array(scaledTotalPopulation).fill().map(() => new Particle(true, false));
@@ -89,11 +91,13 @@ function sketch(p, year, ID){
     };
 
     p.draw = () => {
-        p.background('black');
-
+        p.background('grey');
+        p.stroke(0); // Set stroke color to black
+        p.noFill(); // No fill color for the outer box border
+        p.rect(0, 0, p.width, p.height); // Draw the outer box border
         // Draw inner box
         p.stroke(0);
-        p.fill("grey"); 
+        p.fill("yellow"); 
         p.rect(200, 100, 520, 450); // Bigger rectangle
 
         // Handle particles inside the inner box
@@ -136,8 +140,21 @@ function sketch(p, year, ID){
 }
 
 const Particle = () => {
-    const {year, ID} = countryState();
+    const { year, ID} = countryState();
+   
+    if (
+       
+        !incoming_refugee_data ||
+        !incoming_refugee_data[year] ||
+        !incoming_refugee_data[year][ID] ||
+        !outgoing_refugee_data ||
+        !outgoing_refugee_data[year] ||
+        !outgoing_refugee_data[year][ID] ||
+        !outgoing_refugee_data[year][ID].Count
+    ) {
+        return <h1>No data is present</h1>;
+    }
+
     return <ReactP5Wrapper sketch={(p) => sketch(p, year, ID)} />;
 };
-
 export default Particle;

@@ -33,7 +33,7 @@ const LineChart = () => {
     const chartHeight = parseFloat(d3.select(ref.current).style("height"));
 
     // Chart dimensions and margins
-    const margin = { top: 30, right: 30, bottom: 70, left: 60 };
+    const margin = { top: 30, right: 30, bottom: 50, left: 60 };
     const width = chartWidth - margin.left - margin.right;
     const height = chartHeight - margin.top - margin.bottom;
 
@@ -169,7 +169,7 @@ const LineChart = () => {
 
   return (
     <div>
-      <svg height={"45vh"} width={"50vw"} ref={ref} />
+      <svg height={"90vh"} width={"50vw"} ref={ref} />
     </div>
   );
 };

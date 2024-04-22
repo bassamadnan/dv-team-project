@@ -118,7 +118,7 @@ const BarChart = () => {
   return (
     <div>
       <BarChartSelector />
-      <svg width={"50vw"} height={"45vh"} id="barchart" ref={ref} />
+      <svg width={"50vw"} height={"90vh"} id="barchart" ref={ref} />
     </div>
   );
 };

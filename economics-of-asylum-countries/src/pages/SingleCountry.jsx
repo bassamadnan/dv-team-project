@@ -24,26 +24,20 @@ const SingleCountry = () => {
   // console.log(ID, numeric_to_alpha3[ID]);
   return (
     <div>
-      <div className="grid grid-cols-2 grid-rows-2">
-        <div>
+      <div className="grid grid-cols-2 grid-rows-2 justify-items-center">
+        <div className="col-span-2">
           <Particle />
           <Slider />
         </div>
-        <div>
+        <div className="mt-12">
           <BarChart />
         </div>
-        <div>
-          {/* <ComparableBubbleChart /> */}
-          {/* <GroupVisualization /> */}
-        </div>
-        <div>
+        <div className="mt-12">
           <LineChart />
         </div>
       </div>
       <div>
-        {/* <ComparableBubbleChart /> */}
         <GroupVisualization />
-        {/* <renderBubbleChart /> */}
       </div>
     </div>
   );

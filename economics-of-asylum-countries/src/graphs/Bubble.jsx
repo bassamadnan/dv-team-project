@@ -29,10 +29,10 @@ const GroupVisualization = () => {
   ];
   const datasets = ["lur_data", "ggxwdn_data", "pcpipch_data"]; // Options for data representation
   const option_mapping = {
-    "lur_data": "Unemployment Rates",
-    "ggxwdn_data": "Debt as % of GDP",
-    "pcpipch_data": "Inflation as % of GDP"
-  }
+    lur_data: "Unemployment Rates",
+    ggxwdn_data: "Debt as % of GDP",
+    pcpipch_data: "Inflation as % of GDP",
+  };
   const svgRef = useRef();
   // const legendRef = useRef();
 
@@ -108,6 +108,7 @@ const GroupVisualization = () => {
         .attr("cx", (d) => d.x)
         .attr("cy", (d) => d.y)
         .on("mouseover", handleMouseOver)
+        .on("mousemove", handleMouseOver)
         .on("mouseout", handleMouseOut)
         .call(
           d3
@@ -192,8 +193,8 @@ const GroupVisualization = () => {
   };
 
   return (
-    <div className="dropdown" style={{position:"relative"}}>
-      <div className="flex-col text-center"  style={{zIndex:"3"}}>
+    <div className="dropdown">
+      <div className="flex-col text-center">
         <div style={{ width: "300px" }} />
         <label htmlFor="bubbleChartSelectYear">Select A Year: </label>
         <div className="select text-center">
@@ -230,7 +231,7 @@ const GroupVisualization = () => {
         </div>
       </div>
       <div id="tooltip"></div>
-      <svg width="1800" height="1800" ref={svgRef}  style={{position:"relative", left:"20vw", top:"-20vh", zIndex:"-1"}}/>
+      <svg width="1800" height="1800" ref={svgRef} />
       {/* <svg width="300" height="50" ref={legendRef} /> */}
     </div>
   );
